@@ -8,7 +8,7 @@
 # Demo Features
 - demo@demo.com can view his tickets/ticket status
 - Purchase tickets as demo@demo.com
-- embedded Atlas Charts
+- embedded Atlas Charts using "On-Demand Materialized Views"
 - QR Scanner / Checkin
 
 # Coming soon
