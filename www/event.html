@@ -89,11 +89,16 @@
 
                 $.ajax(settings).done(function (response) {
                     console.log(response);
-                    $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/ticketGen?user_id=6393fe1757271cb5e3b63d18").then((s)=>{
-                        console.log('s',s.ticket);
-                        $("#ticket-img").attr('src',String(s.ticket));
-                        $("#ticket-section").show();
-                    });
+                    if(response.user_id){
+                        $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/ticketGen?user_id="+response.user_id).then((s)=>{
+                            console.log('s',s.ticket);
+                            $("#ticket-img").attr('src',String(s.ticket));
+                            $("#ticket-section").show();
+                        });
+                    }else{
+                        alert('Invalid user_id');
+                    }
+
                 });
                 
             }
