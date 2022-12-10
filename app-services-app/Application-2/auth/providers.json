@@ -1,0 +1,18 @@
+{
+    "api-key": {
+        "name": "api-key",
+        "type": "api-key",
+        "disabled": true
+    },
+    "local-userpass": {
+        "name": "local-userpass",
+        "type": "local-userpass",
+        "config": {
+            "autoConfirm": true,
+            "resetPasswordSubject": "https://www.google.com",
+            "resetPasswordUrl": "https://www.google.com",
+            "runConfirmationFunction": false
+        },
+        "disabled": false
+    }
+}

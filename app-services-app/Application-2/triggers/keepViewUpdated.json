@@ -1,0 +1,27 @@
+{
+    "name": "keepViewUpdated",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "UPDATE"
+        ],
+        "database": "demo_event0",
+        "collection": "events",
+        "service_name": "mongodb-atlas",
+        "match": {},
+        "project": {},
+        "full_document": false,
+        "full_document_before_change": false,
+        "unordered": false,
+        "skip_catchup_events": false,
+        "tolerate_resume_errors": false
+    },
+    "disabled": false,
+    "event_processors": {
+        "FUNCTION": {
+            "config": {
+                "function_name": "viewTrigga"
+            }
+        }
+    }
+}

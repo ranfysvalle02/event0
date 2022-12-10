@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>event0</title>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.13.1/fc-4.2.1/fh-3.3.1/r-2.4.0/datatables.min.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik+Microbe&display=swap" rel="stylesheet">
+        <style>
+            *{
+                box-sizing: border-box;
+            }
+            body{
+                background-color: #3498DB;
+                background: url("https://storage.googleapis.com/blog-images-backup/0*I-sI3u34g0ydRqyA");
+                background-size: cover;
+                font-family: "Arial", sans-serif;
+                padding: 50px;
+            }
+            .container{
+                margin: 20px auto;
+                padding: 10px;
+                width: 300px;
+                background-color: #fff;
+                border-radius: 5px;
+            }
+            .container-2{
+                margin: 20px auto;
+                padding: 10px;
+                width: 100%;
+                background-color: #fff;
+                border-radius: 5px;
+            }
+             h1{
+                 width: 70%;
+                color: #777;
+                font-size: 32px;
+                margin: 28px auto;
+                margin-bottom: 20px;
+                text-align: center;
+                /*padding-top: 40px;*/
+            }
+            form{
+                /*padding: 15px;*/
+                text-align: center;
+            }
+            input{
+                padding: 12px 0;
+                margin-bottom: 10px;
+                border-radius: 3px;
+                border: 2px solid transparent;
+                text-align: center;
+                width: 90%;
+                font-size: 16px;
+                transition: border .2s, background-color .2s;
+            }
+            form .field{
+                background-color: #ECF0F1;
+            }
+            form .field:focus {
+                border: 2px solid #3498DB;
+            }
+            form .btn{
+                background-color: #3498DB;
+                color: #fff;
+                line-height: 25px;
+                cursor: pointer;
+            }
+            form .btn:hover,
+            form .btn:active {
+                background-color: #1F78B4;
+                border: 2px solid #1F78B4;
+            }
+            .pass-link{
+                text-align: center;
+            }
+            .pass-link a:link,
+            .pass-link a:visited{
+                font-size: 12px;
+                color: #777;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header" style="font-family: 'Rubik Microbe', cursive;">
+            <h1 style="letter-spacing: 3px;font-size: 4rem;color:white;">event0 - tickets</h1>
+        </div>
+        <div id="auth">
+            <div class="container">
+                <img style="width:100%;padding-bottom:1em;" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
+                <form action="#">
+                    <input type="text" placeholder="username" value="demo@demo.com" class="field">
+                    <input type="password" placeholder="password" value="demo@demo.com" class="field">
+                    <input type="button" value="login" class="btn" onclick='document.getElementById("auth").style="display:none;";document.getElementById("wrapper").style = "display:block;max-width:800px;margin: 0 auto;";'>
+                </form>
+                <div class="pass-link">
+                    <a href="#" >Ticketing for hoomans</a>
+                </div>	
+            </div>
+        </div>
+
+        <div id="wrapper" style="display:none;"> 
+            <div style="width:100%;">
+                <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:45%;padding-right:5%;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=63940b58-d836-4c07-85c2-609d85c6caca&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
+                <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:50%;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=e8a2d77a-bb99-4582-983d-0bb11497969e&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
+            </div>
+            
+            <table id="example" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>access_type</th>
+                        <th>event_identifier</th>
+                        <th>email</th>
+                        <th>scanned</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>id</th>
+                        <th>access_type</th>
+                        <th>event_identifier</th>
+                        <th>email</th>
+                        <th>scanned</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.13.1/fc-4.2.1/fh-3.3.1/r-2.4.0/datatables.min.js"></script>
+   <script>
+    $(document).ready(function () {
+            $('#example').DataTable({
+                responsive:true,
+                fixedHeader:true,
+                ajax: 'https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/getData',
+                columns: [
+                    { data: '_id',"render": function ( data, type, row, meta ) {
+                        console.log('data',data);
+                        return '<img style="max-width:3em;" src="https://api.qrserver.com/v1/create-qr-code/?data='+encodeURIComponent(data)+'">';
+                    }},
+                    { data: 'access_type' },
+                    { data: 'event_identifier',"render": function ( data, type, row, meta ) {
+                        console.log('data',data);
+                        return '<a href="event.html">'+data+'</a>';
+                    }},
+                    { data: 'email' },
+                    { data: 'scanned' },
+                ],
+            });
+    });
+   </script>
+   <script>
+        /*
+        const getAvatars = () => `{ avatars { _id display_name glb } }`;
+        const options = {
+            method: "post",
+            headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+sessionStorage.getItem('_token')
+            },
+            body: JSON.stringify({
+            query: getAvatars()
+            })
+        };
+        fetch(`__GRAPHQL_ENDPOINT__`, options)
+            .then(res => res.json())
+            .then((x)=>{
+                console.log('x.data',x.data);
+                setItems(x.data.avatars);
+        });
+        */
+    </script>
+    </body>
+</html>
