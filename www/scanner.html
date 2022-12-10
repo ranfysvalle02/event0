@@ -184,7 +184,7 @@
             if(x && x.scanFailed){
                 alert('ALREADY CHECKED IN');
             }else{
-                alert('CHECKED IN! Ticket ID:'+String(x));
+                alert('CHECKED IN! Ticket ID:'+JSON.stringify(x));
             }
         });
         label.textContent = result.data;
