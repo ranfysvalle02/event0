@@ -54,9 +54,9 @@
                 <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
                 
                 <label>E-mail</label>
-                <input type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
+                <input id="input-username" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
                 <label>Password</label>
-                <input type="password" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
+                <input id="input-password" type="password" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
                 <button type="button" style="width:100%;color:black;cursor:pointer; font-weight:bold; letter-spacing:5px;padding:1em;background:green;" onClick="letsGo()">BUY TICKET</button>                
                 <hr />
                 <div id="ticket-section" style="display:none;margin: 0 auto;">
@@ -82,8 +82,8 @@
                         "Content-Type": "application/json"
                     },
                     "data": JSON.stringify({
-                        "username": "demo@demo.com",
-                        "password": "demo@demo.com"
+                        "username": document.getElementById('input-username').value,
+                        "password": document.getElementById('input-password').value
                     }),
                 };
 
