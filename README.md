@@ -11,6 +11,11 @@
 - embedded Atlas Charts
 - QR Scanner / Checkin
 
+# Coming soon
+- Register/Login for more users
+- Event Management for event owners
+- Ticket Resale
+
 # LIVE DEMO 
 https://event0-ssxjd.mongodbstitch.com/ -> My Event Tickets
 
