@@ -110,10 +110,16 @@
                     console.log(response);
                     if(response.user_id){
                         $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/ticketGen?ticket_type="+encodeURIComponent($("#ticket-type").val())+"&email="+encodeURIComponent(document.getElementById('input-username').value)+"&user_id="+response.user_id).then((s)=>{
-                            console.log('s',s.ticket);
-                            $("#ticket-img").attr('src',String(s.ticket));
-                            $("#buy-section").hide();
-                            $("#ticket-section").show();
+                            console.log('s',s);
+                            if(s.waitlist){
+                                alert("Ticket was sold out, but we've added you to the waitlist.");
+                            }
+                            if(s.ticket){
+                                $("#ticket-img").attr('src',String(s.ticket));
+                                $("#buy-section").hide();
+                                $("#ticket-section").show();
+                            }
+                            
                         });
                     }else{
                         alert('Invalid user_id');

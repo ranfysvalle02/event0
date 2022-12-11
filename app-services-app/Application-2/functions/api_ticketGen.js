@@ -20,20 +20,35 @@ exports = async function({ query, headers, body}, response) {
     
     let tixTypeFound = false;
     let evtUpdate = false;
+    let waitlist = false;
     if(!demoEvt.tickets){
       return demoEvt;
     }
     for(let i = 0; i < demoEvt.tickets.length; i++){
       let t = demoEvt.tickets[i];
-      if(tt == t.label && t.max2sell >= t.sold){
-        evtUpdate = await evt.updateOne({event_identifier:"DEMO","tickets.label":t.label},{$inc:{
-          'tickets.$.sold':1
-        }});
-        tixTypeFound = true;
-        break;
+      if(tt == t.label){
+        if(t.max2sell > t.sold){
+          evtUpdate = await evt.updateOne({event_identifier:"DEMO","tickets.label":t.label},{$inc:{
+            'tickets.$.sold':1
+          }});
+          tixTypeFound = true;
+          break;
+        }
+        if(t.max2sell == t.sold){
+          evtUpdate = await evt.updateOne({event_identifier:"DEMO","tickets.label":t.label},{$addToSet:{
+            'tickets.$.waitlist':{
+              user_id:user_id,
+              email:email
+            }
+          }});
+          tixTypeFound = true;
+          waitlist = true;
+          break;
+        }  
       }
+      
     }
-    if(tixTypeFound){
+    if(tixTypeFound && !waitlist){
       
       const result = await tix.insertOne({
                 "access_type": tt,
@@ -43,6 +58,9 @@ exports = async function({ query, headers, body}, response) {
                 "scanned": false
             });
       return {ticket:"https://api.qrserver.com/v1/create-qr-code/?data="+result.insertedId.toString(), evtUpdate: evtUpdate};    
+    }
+    if(waitlist){
+      return {"waitlist":true};
     }
     return {"err":"Ticket type unavailable."};  
       

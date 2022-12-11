@@ -20,5 +20,17 @@
         "private": true,
         "run_as_system": true,
         "disable_arg_logs": true
+    },
+    {
+        "name": "api_waitlist",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "api_ticketTransfer",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
     }
 ]

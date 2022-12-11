@@ -105,7 +105,23 @@
 
         <div id="wrapper" style="display:none;"> 
             
-            
+            <div>
+                <label>Ticket Transfer: </label>
+                <br />
+                <select id="select-tt">
+                    <option value="VIP">
+                        VIP
+                    </option>
+                    <option value="General Admission">
+                        General Admission
+                    </option>
+                </select>
+                <select id="select-useremail">
+                    
+                </select>
+                <button type="button" onclick="letsTransfer()">transfer</button>
+            </div>
+<hr />
             <table id="example" class="display" style="width:100%">
                 <thead>
                     <tr>
@@ -134,6 +150,20 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.13.1/fc-4.2.1/fh-3.3.1/r-2.4.0/datatables.min.js"></script>
    
    <script>
+        var letsTransfer = function(){
+            $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/transfer?source="+encodeURIComponent(sessionStorage.getItem('user_id'))+"&target="+encodeURIComponent($("#select-useremail").val())+"&ticket_type="+encodeURIComponent($("#select-tt").val())).then((x)=>{
+                console.log('x',x);
+                if(x.ctix && x.ctix.modifiedCount == 1){
+                    alert('Ticket Transfer successful!');
+                    $("#select-tt").trigger('change');
+                    if(window.dt){
+                        window.dt.ajax.reload();
+                    }
+                }else{
+                    alert('Ticket transfer failed!');
+                }
+            });
+        };
         var letsGo = function(){
 
             var settings = {
@@ -152,7 +182,8 @@
             $.ajax(settings).done(function (response) {
                 console.log(response);
                 if(response.user_id){
-                    $('#example').DataTable({
+                    sessionStorage.setItem('user_id',response.user_id);
+                    window.dt = $('#example').DataTable({
                         responsive:true,
                         fixedHeader:true,
                         ajax: 'https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/getData?user_id='+encodeURIComponent(response.user_id),
@@ -184,6 +215,31 @@
             $("#login-btn").off('click').on('click',function(){
                 letsGo();
             });
+            $("#select-tt").off('change').on('change',function(){
+                let ctt = $( this ).val();
+                $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/waitlist").then((x)=>{
+                    console.log('x',x); //use ctt
+                    $("#select-useremail").html('');
+                    let tmpHTML = "";
+                    if(x.data[ctt]){
+                        x.data[ctt].forEach((p)=>{
+                            tmpHTML += "<option value='"+p.email+"'>"+p.email+"</option>";
+                        });
+                        console.log('tmpHTML',tmpHTML);
+                        $("#select-useremail").html(tmpHTML); 
+                    }
+                })
+            });
+            $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/waitlist").then((x)=>{
+                console.log('x',x); //start with VIP 
+                $("#select-useremail").html('');
+                let tmpHTML = "";
+                x.data['VIP'].forEach((p)=>{
+                    tmpHTML += "<option value='"+p.email+"'>"+p.email+"</option>";
+                });
+                console.log('tmpHTML',tmpHTML);
+                $("#select-useremail").html(tmpHTML); 
+            })
         });
     </script>
     </body>

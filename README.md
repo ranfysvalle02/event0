@@ -1,22 +1,24 @@
 # event0
-# Realm App Services + HTML/JS/CSS 
+# Atlas App Services + HTML/JS/CSS 
 
 # Limitation for Demo
-- No resale capability available (yet)
+- Platform does not support ticket resale until tickets are SOLD OUT
+- Resale == Ticket Ownership Transfer (no fee; no ticket scalping;)
 
 # Demo Features
 - Register/Login
 - Purchase tickets
+- Transfer tickets
 - View Tickets
 - embedded Atlas Charts using "On-Demand Materialized Views" @ Event Page
 - QR Scanner / Checkin for Event Admin
 
 # Coming soon
-- Ticket Resale
 - Event Management for event owners
+- Find Events
 
 # LIVE DEMO 
-https://event0-ssxjd.mongodbstitch.com/ -> My Event Tickets
+https://event0-ssxjd.mongodbstitch.com/index.html -> My Event Tickets
 
 https://event0-ssxjd.mongodbstitch.com/scanner.html -> QR Scanner / Checkin
 
