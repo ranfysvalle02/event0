@@ -10,18 +10,14 @@ exports = async function({ query, headers, body}, response) {
       .get("mongodb-atlas")
       .db("demo_event0")
       .collection("events");
-    var UsernameGenerator = require('username-generator');
     
     let demoEvt = await evt.findOne({"event_identifier":"DEMO"});
     
-    let randomIntFromInterval = function(min, max) { // min and max included 
-      return Math.floor(Math.random() * (max - min + 1) + min)
-    };
     
-    let ticketTypes = ["General Admission","VIP"];
-    let tt = ticketTypes[randomIntFromInterval(0,1)];
     
-    let {user_id} = query;
+    let {user_id,ticket_type,email} = query;
+    tt = String(ticket_type);
+    
     let tixTypeFound = false;
     let evtUpdate = false;
     if(!demoEvt.tickets){
@@ -42,7 +38,7 @@ exports = async function({ query, headers, body}, response) {
       const result = await tix.insertOne({
                 "access_type": tt,
                 "event_identifier": "DEMO",
-                "email": "demo@demo.com",
+                "email": String(email),
                 "user_id":user_id,
                 "scanned": false
             });

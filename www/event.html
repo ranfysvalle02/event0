@@ -43,28 +43,47 @@
                 text-align: center;
                 /*padding-top: 40px;*/
             }
+            @media (max-width: 767px) {                  
+                .content-to-hide-when-small {
+                    display: none;
+                }
+            }
         </style>
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
             <h1 style="letter-spacing: 3px;font-size: 3rem;text-align:center;color:white;">event0</h1>
         </div>
+        <div class="content-to-hide-when-small">
+            <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:25%;float:left;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=63940b58-d836-4c07-85c2-609d85c6caca&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
+            <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:25%;float:right;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=e8a2d77a-bb99-4582-983d-0bb11497969e&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
+        </div>
+        
         <div id="auth">
-            <div class="container">
+            <div id="buy-section" class="container">
+                <label>Ticket Type:</label>
+                <select id="ticket-type">
+                    <option value="General Admission">General Admission</option>
+                    <option value="VIP">VIP</option>
+                </select>
                 <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
-                
                 <label>E-mail</label>
                 <input id="input-username" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
                 <label>Password</label>
                 <input id="input-password" type="password" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
+                
                 <button type="button" style="width:100%;color:black;cursor:pointer; font-weight:bold; letter-spacing:5px;padding:1em;background:green;" onClick="letsGo()">BUY TICKET</button>                
                 <hr />
-                <div id="ticket-section" style="display:none;margin: 0 auto;">
+                <h5>Don't have an account? <a href="register.html">REGISTER</a></h5>
+            </div>
+            <div id="ticket-section" class="container" style="display:none;margin: 0 auto;">
+                
+                    <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
                     <img id="ticket-img" style="width:5em;margin: 0 35%;" src="" />
                     <a href="index.html">View My Tickets</a>
-                </div>
+                
             </div>
-
+            
         </div>
 
         
@@ -90,9 +109,10 @@
                 $.ajax(settings).done(function (response) {
                     console.log(response);
                     if(response.user_id){
-                        $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/ticketGen?user_id="+response.user_id).then((s)=>{
+                        $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/ticketGen?ticket_type="+encodeURIComponent($("#ticket-type").val())+"&email="+encodeURIComponent(document.getElementById('input-username').value)+"&user_id="+response.user_id).then((s)=>{
                             console.log('s',s.ticket);
                             $("#ticket-img").attr('src',String(s.ticket));
+                            $("#buy-section").hide();
                             $("#ticket-section").show();
                         });
                     }else{

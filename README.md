@@ -2,19 +2,18 @@
 # Realm App Services + HTML/JS/CSS 
 
 # Limitation for Demo
-- Only one user can purchase tickets. demo@demo.com with password: demo@demo.com
 - No resale capability available (yet)
-- 
+
 # Demo Features
-- demo@demo.com can view his tickets/ticket status
-- Purchase tickets as demo@demo.com
-- embedded Atlas Charts using "On-Demand Materialized Views"
-- QR Scanner / Checkin
+- Register/Login
+- Purchase tickets
+- View Tickets
+- embedded Atlas Charts using "On-Demand Materialized Views" @ Event Page
+- QR Scanner / Checkin for Event Admin
 
 # Coming soon
-- Register/Login for more users
-- Event Management for event owners
 - Ticket Resale
+- Event Management for event owners
 
 # LIVE DEMO 
 https://event0-ssxjd.mongodbstitch.com/ -> My Event Tickets
@@ -22,6 +21,8 @@ https://event0-ssxjd.mongodbstitch.com/ -> My Event Tickets
 https://event0-ssxjd.mongodbstitch.com/scanner.html -> QR Scanner / Checkin
 
 https://event0-ssxjd.mongodbstitch.com/event.html -> Purchase Tickets
+
+https://event0-ssxjd.mongodbstitch.com/register.html -> Register
 
 
 # Inspired by 

@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>event0</title>
+        <title>event0 | register</title>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.13.1/fc-4.2.1/fh-3.3.1/r-2.4.0/datatables.min.css"/>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,7 +86,7 @@
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
-            <h1 style="letter-spacing: 3px;font-size: 3rem;color:white;">event0 - tickets</h1>
+            <h1 style="letter-spacing: 3px;font-size: 3rem;color:white;">event0 - register</h1>
         </div>
         <div id="auth">
             <div class="container">
@@ -96,95 +96,53 @@
                     <input id="input-username" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
                     <label>Password</label>
                     <input id="input-password" type="password" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>    
-                    <input type="button" value="login" class="btn" id="login-btn" />
+                    <input type="button" value="register" class="btn" id="register-btn" />
                 </form>
-                <h5>Don't have an account? <a href="register.html">REGISTER</a></h5>
+                <div class="pass-link">
+                    <a href="#" >Ticketing for hoomans</a>
+                </div>	
             </div>
-            
         </div>
 
-        <div id="wrapper" style="display:none;"> 
-            
-            
-            <table id="example" class="display" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>access_type</th>
-                        <th>event_identifier</th>
-                        <th>email</th>
-                        <th>scanned</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>id</th>
-                        <th>access_type</th>
-                        <th>event_identifier</th>
-                        <th>email</th>
-                        <th>scanned</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+        
         
 
 
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.13.1/fc-4.2.1/fh-3.3.1/r-2.4.0/datatables.min.js"></script>
-   
-   <script>
-        var letsGo = function(){
-
-            var settings = {
-                "url": "https://realm.mongodb.com/api/client/v2.0/app/application-2-ntsvm/auth/providers/local-userpass/login",
-                "method": "POST",
-                "timeout": 0,
-                "headers": {
-                    "Content-Type": "application/json"
-                },
-                "data": JSON.stringify({
-                    "username": document.getElementById('input-username').value,
-                    "password": document.getElementById('input-password').value
-                }),
-            };
-
-            $.ajax(settings).done(function (response) {
-                console.log(response);
-                if(response.user_id){
-                    $('#example').DataTable({
-                        responsive:true,
-                        fixedHeader:true,
-                        ajax: 'https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/getData?user_id='+encodeURIComponent(response.user_id),
-                        columns: [
-                            { data: '_id',"render": function ( data, type, row, meta ) {
-                                console.log('data',data);
-                                return '<img style="max-width:3em;" src="https://api.qrserver.com/v1/create-qr-code/?data='+encodeURIComponent(data)+'">';
-                            }},
-                            { data: 'access_type' },
-                            { data: 'event_identifier',"render": function ( data, type, row, meta ) {
-                                console.log('data',data);
-                                return '<a href="event.html">'+data+'</a>';
-                            }},
-                            { data: 'email' },
-                            { data: 'scanned' },
-                        ],
-                    });
-                    $("#auth").hide();
-                    $("#wrapper").show();
-                }else{
-                    alert('Invalid user_id');
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        <script>
+            
+            $("#register-btn").off('click').on("click",function(){
+                let email = $("#input-username").val();
+                let password = $("#input-password").val();
+                if(email && password && email.length >= 4){
+                    fetch("https://us-east-1.aws.realm.mongodb.com/api/client/v2.0/app/application-2-ntsvm/auth/providers/local-userpass/register", {
+                        "headers": {
+                            "accept": "application/json",
+                            "accept-language": "en-US,en",
+                            "content-type": "application/json",
+                            "sec-fetch-dest": "empty",
+                            "sec-fetch-mode": "cors",
+                            "sec-fetch-site": "cross-site",
+                            "sec-gpc": "1"
+                        },
+                        "body": "{\"email\":\""+email+"\",\"password\":\""+password+"\"}",
+                        "method": "POST",
+                        "mode": "cors",
+                        "credentials": "omit"
+                        }).then((x)=>{
+                            x.json().then((y)=>{
+                                console.log('y',y);
+                                if(y.error){
+                                    alert(y.error);
+                                }else{
+                                    //successful registration
+                                    alert('successfully registered!');
+                                }
+                            })
+                        });
                 }
-
-            });
-
-        }
-
-        $(document).ready(function () {
-            $("#login-btn").off('click').on('click',function(){
-                letsGo();
-            });
-        });
-    </script>
+                
+            })
+        </script>
     </body>
 </html>

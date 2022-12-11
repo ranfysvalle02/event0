@@ -4,8 +4,8 @@ exports = async function({ query, headers, body}, response) {
       .get("mongodb-atlas")
       .db("demo_event0")
       .collection("tickets");
-      
+    const {user_id} = query;
     return  {
-      "data": await tix.find({}).toArray()
+      "data": await tix.find({user_id:user_id}).toArray()
     };
 };
