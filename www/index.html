@@ -151,7 +151,7 @@
    
    <script>
         var letsTransfer = function(){
-            $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/transfer?source="+encodeURIComponent(sessionStorage.getItem('user_id'))+"&target="+encodeURIComponent($("#select-useremail").val())+"&ticket_type="+encodeURIComponent($("#select-tt").val())).then((x)=>{
+            $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/transfer?source="+encodeURIComponent(sessionStorage.getItem('user_id'))+"&ticket_type="+encodeURIComponent($("#select-tt").val())).then((x)=>{
                 console.log('x',x);
                 if(x.ctix && x.ctix.modifiedCount == 1){
                     alert('Ticket Transfer successful!');
@@ -222,23 +222,21 @@
                     $("#select-useremail").html('');
                     let tmpHTML = "";
                     if(x.data[ctt]){
-                        x.data[ctt].forEach((p)=>{
-                            tmpHTML += "<option value='"+p.email+"'>"+p.email+"</option>";
-                        });
+                        tmpHTML += "<option value='"+x.data[ctt].length+"'>"+x.data[ctt].length+"</option>";
                         console.log('tmpHTML',tmpHTML);
                         $("#select-useremail").html(tmpHTML); 
                     }
                 })
             });
             $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/waitlist").then((x)=>{
-                console.log('x',x); //start with VIP 
-                $("#select-useremail").html('');
-                let tmpHTML = "";
-                x.data['VIP'].forEach((p)=>{
-                    tmpHTML += "<option value='"+p.email+"'>"+p.email+"</option>";
-                });
-                console.log('tmpHTML',tmpHTML);
-                $("#select-useremail").html(tmpHTML); 
+                    console.log('x',x); //use ctt
+                    $("#select-useremail").html('');
+                    let tmpHTML = "";
+                    if(x.data['VIP']){
+                        tmpHTML += "<option value='"+x.data['VIP'].length+"'>"+x.data['VIP'].length+" person in waitlist</option>";
+                        console.log('tmpHTML',tmpHTML);
+                        $("#select-useremail").html(tmpHTML); 
+                    }
             })
         });
     </script>

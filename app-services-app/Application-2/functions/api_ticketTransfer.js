@@ -8,16 +8,26 @@ exports = async function({ query, headers, body}, response) {
     .get("mongodb-atlas")
     .db("demo_event0")
     .collection("events");
-  const {ticket_type,target,source} = query;
+  const {ticket_type,source} = query;
+  let target = '';
   let e = await evts.findOne({event_identifier:"DEMO"});
   let newWL = [];
   let targetUserId = '';
   
   let evtUpdate = false;
-  
+  function randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+
   for(let i = 0; i < e.tickets.length; i++){
     let ct = e.tickets[i];
     if(ct.label == ticket_type){
+      //pick someone randomly 
+      let index = randomIntFromInterval(0,ct.waitlist.length);
+      let person = ct.waitlist[index];
+      targetUserId = person.user_id;
+      target = person.email;
+      
       ct.waitlist.forEach((p)=>{
         if(p.email == target){
           targetUserId = p.user_id;

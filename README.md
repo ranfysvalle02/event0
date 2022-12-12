@@ -1,5 +1,12 @@
 # event0
-# Atlas App Services + HTML/JS/CSS 
+##### a ticket platform without the fees or the ticket scalping
+
+## How will this prevent ticket scalping?
+Tickets can only be resold for the price they were purchased. It's essentially a transfer of ownership. 
+If the person wants a ticket to the event, he can purchase it directly from event owner. If the tickets are sold out - the user may still attempt to purchase the ticket at which point they'll be added to a waitlist. If a ticket of the desired type becomes available (by someone who owns a ticket of that type 'transfering it to the resale system') - the system will randomly select someone from the waitlist and grant that ticket to that person. In this stage we could issue refunds, payment processing, etc. Keep your tickets, and your scalp. 
+
+## Is it really free?
+Yup. The whole thing is hosted on MongoDB Atlas free tier. 
 
 # Limitation for Demo
 - Platform does not support ticket resale until tickets are SOLD OUT
