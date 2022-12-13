@@ -1,5 +1,5 @@
 // This function is the endpoint's request handler.
-exports = async function({ query, headers, body}, response) {
+exports = async function(ticket_type,email) {
     
     const tix = context.services
       .get("mongodb-atlas")
@@ -13,9 +13,8 @@ exports = async function({ query, headers, body}, response) {
     
     let demoEvt = await evt.findOne({"event_identifier":"DEMO"});
     
+    let user_id = context.user.id;
     
-    
-    let {user_id,ticket_type,email} = query;
     tt = String(ticket_type);
     
     let tixTypeFound = false;

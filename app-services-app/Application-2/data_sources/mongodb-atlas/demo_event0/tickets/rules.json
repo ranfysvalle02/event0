@@ -1,0 +1,17 @@
+{
+    "collection": "tickets",
+    "database": "demo_event0",
+    "roles": [
+        {
+            "name": "readAndWriteAll",
+            "apply_when": {
+                "user_id": "%%user.id"
+            },
+            "read": true,
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "search": true
+        }
+    ]
+}

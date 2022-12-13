@@ -1,17 +1,5 @@
 [
     {
-        "name": "api_ticketGen",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "api_getData",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "viewTrigga",
         "private": true
     },
@@ -28,9 +16,18 @@
         "disable_arg_logs": true
     },
     {
-        "name": "api_ticketTransfer",
-        "private": true,
-        "run_as_system": true,
+        "name": "getData",
+        "private": false,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "ticketTransfer",
+        "private": false,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "ticketGen",
+        "private": false,
         "disable_arg_logs": true
     }
 ]

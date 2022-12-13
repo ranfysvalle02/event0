@@ -83,6 +83,8 @@
                 color: #777;
             }
         </style>
+
+        <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
@@ -151,69 +153,65 @@
    
    <script>
         var letsTransfer = function(){
-            $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/transfer?source="+encodeURIComponent(sessionStorage.getItem('user_id'))+"&ticket_type="+encodeURIComponent($("#select-tt").val())).then((x)=>{
-                console.log('x',x);
-                if(x.ctix && x.ctix.modifiedCount == 1){
-                    alert('Ticket Transfer successful!');
-                    $("#select-tt").trigger('change');
-                    if(window.dt){
-                        window.dt.ajax.reload();
-                    }
-                }else{
-                    alert('Ticket transfer failed!');
-                }
-            });
+            window.app.currentUser.functions.ticketTransfer($("#select-tt").val()).then((x)=>{
+                console.log('ticket_transfer',x);
+                $("#select-tt").trigger("change");
+            })
         };
-        var letsGo = function(){
-
-            var settings = {
-                "url": "https://realm.mongodb.com/api/client/v2.0/app/application-2-ntsvm/auth/providers/local-userpass/login",
-                "method": "POST",
-                "timeout": 0,
-                "headers": {
-                    "Content-Type": "application/json"
-                },
-                "data": JSON.stringify({
-                    "username": document.getElementById('input-username').value,
-                    "password": document.getElementById('input-password').value
-                }),
-            };
-
-            $.ajax(settings).done(function (response) {
-                console.log(response);
-                if(response.user_id){
-                    sessionStorage.setItem('user_id',response.user_id);
-                    window.dt = $('#example').DataTable({
-                        responsive:true,
-                        fixedHeader:true,
-                        ajax: 'https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/getData?user_id='+encodeURIComponent(response.user_id),
-                        columns: [
-                            { data: '_id',"render": function ( data, type, row, meta ) {
-                                console.log('data',data);
-                                return '<img style="max-width:3em;" src="https://api.qrserver.com/v1/create-qr-code/?data='+encodeURIComponent(data)+'">';
-                            }},
-                            { data: 'access_type' },
-                            { data: 'event_identifier',"render": function ( data, type, row, meta ) {
-                                console.log('data',data);
-                                return '<a href="event.html">'+data+'</a>';
-                            }},
-                            { data: 'email' },
-                            { data: 'scanned' },
-                        ],
-                    });
-                    $("#auth").hide();
-                    $("#wrapper").show();
-                }else{
-                    alert('Invalid user_id');
-                }
-
-            });
-
-        }
 
         $(document).ready(function () {
-            $("#login-btn").off('click').on('click',function(){
-                letsGo();
+            
+            window.app = new Realm.App({ id: "application-2-ntsvm" });
+            async function loginEmailPassword(email, password) {
+                // Create an email/password credential
+                const credentials = Realm.Credentials.emailPassword(email, password);
+                try {
+                    // Authenticate the user
+                    const user = await app.logIn(credentials);
+                    // `App.currentUser` updates to match the logged in user
+                    console.assert(user.id === app.currentUser.id);
+                    return user;
+                } catch (err) {
+                    console.error("Failed to log in", err);
+                }
+            };
+            
+            
+            $("#login-btn").off('click').on('click',function(){ 
+                loginEmailPassword(document.getElementById("input-username").value, document.getElementById("input-password").value).then((x)=>{
+                    console.log('x',x);
+                    if(!x){
+                        console.log('LOGIN FAILED');
+                    }else{
+                        console.log('user',x);
+                        window.app.currentUser.functions.getData().then((y)=>{
+                            console.log('y',y);
+                            if(y){
+                                window.dt = $('#example').DataTable({
+                                    responsive:true,
+                                    fixedHeader:true,
+                                    data: y.data,
+                                    columns: [
+                                        { data: '_id',"render": function ( data, type, row, meta ) {
+                                            console.log('data',data);
+                                            return '<img style="max-width:3em;" src="https://api.qrserver.com/v1/create-qr-code/?data='+encodeURIComponent(data)+'">';
+                                        }},
+                                        { data: 'access_type' },
+                                        { data: 'event_identifier',"render": function ( data, type, row, meta ) {
+                                            console.log('data',data);
+                                            return '<a href="event.html">'+data+'</a>';
+                                        }},
+                                        { data: 'email' },
+                                        { data: 'scanned' },
+                                    ],
+                                });
+                                $("#auth").hide();
+                                $("#wrapper").show();
+                            }
+                        });
+                        
+                    }
+                });
             });
             $("#select-tt").off('change').on('change',function(){
                 let ctt = $( this ).val();
@@ -222,7 +220,7 @@
                     $("#select-useremail").html('');
                     let tmpHTML = "";
                     if(x.data[ctt]){
-                        tmpHTML += "<option value='"+x.data[ctt].length+"'>"+x.data[ctt].length+"</option>";
+                        tmpHTML += "<option value='"+x.data[ctt]+"'>"+x.data[ctt]+"</option>";
                         console.log('tmpHTML',tmpHTML);
                         $("#select-useremail").html(tmpHTML); 
                     }
@@ -233,7 +231,7 @@
                     $("#select-useremail").html('');
                     let tmpHTML = "";
                     if(x.data['VIP']){
-                        tmpHTML += "<option value='"+x.data['VIP'].length+"'>"+x.data['VIP'].length+" person in waitlist</option>";
+                        tmpHTML += "<option value='"+x.data['VIP']+"'>"+x.data['VIP']+" person in waitlist</option>";
                         console.log('tmpHTML',tmpHTML);
                         $("#select-useremail").html(tmpHTML); 
                     }

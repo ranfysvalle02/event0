@@ -19,6 +19,7 @@ Yup. The whole thing is hosted on MongoDB Atlas free tier.
 - View Tickets
 - embedded Atlas Charts using "On-Demand Materialized Views" @ Event Page
 - QR Scanner / Checkin for Event Admin
+- Secure with App Services Authentication / Rules / Realm-Web SDK
 
 # Coming soon
 - Event Management for event owners

@@ -1,27 +1,5 @@
 [
     {
-        "route": "/ticketGen",
-        "http_method": "GET",
-        "function_name": "api_ticketGen",
-        "validation_method": "NO_VALIDATION",
-        "respond_result": true,
-        "fetch_custom_user_data": false,
-        "create_user_on_auth": false,
-        "disabled": false,
-        "return_type": "JSON"
-    },
-    {
-        "route": "/getData",
-        "http_method": "GET",
-        "function_name": "api_getData",
-        "validation_method": "NO_VALIDATION",
-        "respond_result": true,
-        "fetch_custom_user_data": false,
-        "create_user_on_auth": false,
-        "disabled": false,
-        "return_type": "JSON"
-    },
-    {
         "route": "/scan",
         "http_method": "GET",
         "function_name": "api_ticketCheckin",
@@ -36,17 +14,6 @@
         "route": "/waitlist",
         "http_method": "GET",
         "function_name": "api_waitlist",
-        "validation_method": "NO_VALIDATION",
-        "respond_result": true,
-        "fetch_custom_user_data": false,
-        "create_user_on_auth": false,
-        "disabled": false,
-        "return_type": "JSON"
-    },
-    {
-        "route": "/transfer",
-        "http_method": "GET",
-        "function_name": "api_ticketTransfer",
         "validation_method": "NO_VALIDATION",
         "respond_result": true,
         "fetch_custom_user_data": false,

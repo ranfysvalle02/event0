@@ -49,6 +49,7 @@
                 }
             }
         </style>
+        <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
@@ -92,25 +93,15 @@
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
         <script>
             var letsGo = function(){
-
-                var settings = {
-                    "url": "https://realm.mongodb.com/api/client/v2.0/app/application-2-ntsvm/auth/providers/local-userpass/login",
-                    "method": "POST",
-                    "timeout": 0,
-                    "headers": {
-                        "Content-Type": "application/json"
-                    },
-                    "data": JSON.stringify({
-                        "username": document.getElementById('input-username').value,
-                        "password": document.getElementById('input-password').value
-                    }),
-                };
-
-                $.ajax(settings).done(function (response) {
-                    console.log(response);
-                    if(response.user_id){
-                        $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/ticketGen?ticket_type="+encodeURIComponent($("#ticket-type").val())+"&email="+encodeURIComponent(document.getElementById('input-username').value)+"&user_id="+response.user_id).then((s)=>{
-                            console.log('s',s);
+                loginEmailPassword(document.getElementById("input-username").value, document.getElementById("input-password").value).then((x)=>{
+                    console.log('x',x);
+                    if(!x){
+                        console.log('LOGIN FAILED');
+                    }else{
+                        console.log('user',x);
+                        window.app.currentUser.functions.ticketGen($("#ticket-type").val(),$("#input-username").val()).then((y)=>{
+                            console.log('y',y);
+                            let s = y;
                             if(s.waitlist){
                                 alert("Ticket was sold out, but we've added you to the waitlist.");
                             }
@@ -119,15 +110,25 @@
                                 $("#buy-section").hide();
                                 $("#ticket-section").show();
                             }
-                            
                         });
-                    }else{
-                        alert('Invalid user_id');
+                        
                     }
-
                 });
-                
             }
+            window.app = new Realm.App({ id: "application-2-ntsvm" });
+            async function loginEmailPassword(email, password) {
+                // Create an email/password credential
+                const credentials = Realm.Credentials.emailPassword(email, password);
+                try {
+                    // Authenticate the user
+                    const user = await app.logIn(credentials);
+                    // `App.currentUser` updates to match the logged in user
+                    console.assert(user.id === app.currentUser.id);
+                    return user;
+                } catch (err) {
+                    console.error("Failed to log in", err);
+                }
+            };
         </script>
     </body>
 </html>

@@ -10,8 +10,7 @@ exports = async function({ query, headers, body}, response) {
   for(let i = 0; i < x.tickets.length; i++){
     let ctix = x.tickets[i];
     if(ctix.waitlist && ctix.waitlist.length > 0){
-      ctix.waitlist.forEach((c)=>{delete c['user_id']});
-      waitList['data'][String(ctix.label)] = ctix.waitlist
+      waitList['data'][String(ctix.label)] = ctix.waitlist.length;
     }
   }
   return waitList;
