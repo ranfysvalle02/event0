@@ -88,7 +88,7 @@
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
-            <h1 style="letter-spacing: 3px;font-size: 3rem;color:white;">event0 - tickets</h1>
+            <h1 style="letter-spacing: 3px;font-size: 3rem;color:white;">event0 - events</h1>
         </div>
         <div id="auth">
             <div class="container">
@@ -106,36 +106,21 @@
         </div>
 
         <div id="wrapper" style="display:none;"> 
-            
-            <div>
-                <label>Ticket Transfer: </label>
-                <br />
-                <select id="select-evt-id">
-                    
-                </select>
-                <select id="select-tt">
+            <h5>Don't see the event you are looking for? <a href="new-event.html">CREATE ONE</a></h5>
 
-                </select>
-                <button type="button" onclick="letsTransfer()">transfer</button>
-            </div>
-<hr />
             <table id="example" class="display" style="width:100%">
                 <thead>
                     <tr>
                         <th>id</th>
-                        <th>access_type</th>
                         <th>event_identifier</th>
-                        <th>email</th>
-                        <th>scanned</th>
+                        <th>description</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
                         <th>id</th>
-                        <th>access_type</th>
                         <th>event_identifier</th>
-                        <th>email</th>
-                        <th>scanned</th>
+                        <th>description</th>
                     </tr>
                 </tfoot>
             </table>
@@ -147,17 +132,10 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.13.1/fc-4.2.1/fh-3.3.1/r-2.4.0/datatables.min.js"></script>
    
    <script>
-        const params = new URLSearchParams(window.location.search);
-        
         var letsTransfer = function(){
-            window.app.currentUser.functions.ticketTransfer($("#select-tt").val(),$("#select-evt-id").val()).then((x)=>{
+            window.app.currentUser.functions.ticketTransfer($("#select-tt").val()).then((x)=>{
                 console.log('ticket_transfer',x);
-                if(x.err){
-                    alert(x.err);
-                }else{
-                    alert('Transfer successful!')
-                }
-                $("#select-evt-id").trigger("change");
+                $("#select-tt").trigger("change");
             })
         };
 
@@ -186,36 +164,9 @@
                         console.log('LOGIN FAILED');
                     }else{
                         console.log('user',x);
-                        window.app.currentUser.functions.getData().then((y)=>{
+                        window.app.currentUser.functions.getEventData().then((y)=>{
                             console.log('y',y);
-                            let options = {};
-                            let ticketOptions = {};
                             if(y){
-                                y.data.forEach((item)=>{
-                                    if(!options[item.event_identifier]){
-                                        options[item.event_identifier] = "";
-                                    }
-                                    
-                                    options[item.event_identifier] = "<option value='"+item.event_identifier+"'>"+item.event_identifier+"</option>"
-                                    if(!ticketOptions[item.event_identifier]){
-                                        ticketOptions[item.event_identifier] = {};
-                                    }
-                                    if(!ticketOptions[item.event_identifier][item.access_type]){
-                                        ticketOptions[item.event_identifier][item.access_type] = "";
-                                    }
-                                    if(!String(ticketOptions[item.event_identifier][item.access_type]).includes(item.access_type)){
-                                        ticketOptions[item.event_identifier][item.access_type] = "<option value='"+item.access_type+"'>"+item.access_type+"</option>"
-                                    }
-                                });
-                                console.log('options',options);
-                                console.log('values',Object.values(options).join(''))
-                                console.log('toptions',ticketOptions);
-                                console.log('tvalues',Object.values(ticketOptions).join(''));
-                                $("#select-evt-id").html(Object.values(options).join(''));
-                                $("#select-evt-id").off('change').on('change',function(){
-                                    $("#select-tt").html(Object.values(ticketOptions[$(this).val()]).join(''));
-                                });
-                                $("#select-evt-id").trigger("change");
                                 window.dt = $('#example').DataTable({
                                     responsive:true,
                                     fixedHeader:true,
@@ -223,54 +174,23 @@
                                     columns: [
                                         { data: '_id',"render": function ( data, type, row, meta ) {
                                             console.log('data',data);
-                                            return '<img style="max-width:3em;" src="https://api.qrserver.com/v1/create-qr-code/?data='+encodeURIComponent(data)+'">';
+                                            return '<img style="max-width:3em;" src="https://api.qrserver.com/v1/create-qr-code/?data='+encodeURIComponent("event::"+data)+'">';
                                         }},
-                                        { data: 'access_type' },
                                         { data: 'event_identifier',"render": function ( data, type, row, meta ) {
                                             console.log('data',data);
                                             return '<a href="event.html?event_identifier='+encodeURIComponent(data)+'">'+data+'</a>';
                                         }},
-                                        { data: 'email' },
-                                        { data: 'scanned' },
+                                        { data: 'event_description' },
                                     ],
                                 });
                                 $("#auth").hide();
                                 $("#wrapper").show();
                             }
                         });
-
-
-
-                        /*
-                            $("#select-tt").off('change').on('change',function(){
-                                let ctt = $( this ).val();
-                                $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/waitlist").then((x)=>{
-                                    console.log('x',x); //use ctt
-                                    $("#select-useremail").html('');
-                                    let tmpHTML = "";
-                                    if(x.data[ctt]){
-                                        tmpHTML += "<option value='"+x.data[ctt]+"'>"+x.data[ctt]+"</option>";
-                                        console.log('tmpHTML',tmpHTML);
-                                        $("#select-useremail").html(tmpHTML); 
-                                    }
-                                })
-                            });
-                            $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/waitlist").then((x)=>{
-                                    console.log('x',x); //use ctt
-                                    $("#select-useremail").html('');
-                                    let tmpHTML = "";
-                                    if(x.data['VIP']){
-                                        tmpHTML += "<option value='"+x.data['VIP']+"'>"+x.data['VIP']+" person in waitlist</option>";
-                                        console.log('tmpHTML',tmpHTML);
-                                        $("#select-useremail").html(tmpHTML); 
-                                    }
-                            })
-                            */
                         
                     }
                 });
             });
-            
         });
     </script>
     </body>

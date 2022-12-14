@@ -20,10 +20,11 @@ Yup. The whole thing is hosted on MongoDB Atlas free tier.
 - embedded Atlas Charts using "On-Demand Materialized Views" @ Event Page
 - QR Scanner / Checkin for Event Admin
 - Secure with App Services Authentication / Rules / Realm-Web SDK
+- Find Events
+- Create Events
 
 # Coming soon
-- Event Management for event owners
-- Find Events
+- Manage an event you created (change ticket information or delete)
 
 # LIVE DEMO 
 https://event0-ssxjd.mongodbstitch.com/index.html -> My Event Tickets
@@ -33,6 +34,11 @@ https://event0-ssxjd.mongodbstitch.com/scanner.html -> QR Scanner / Checkin
 https://event0-ssxjd.mongodbstitch.com/event.html -> Purchase Tickets
 
 https://event0-ssxjd.mongodbstitch.com/register.html -> Register
+
+https://event0-ssxjd.mongodbstitch.com/new-event.html -> Create new event
+
+https://event0-ssxjd.mongodbstitch.com/all-events.html -> Browse all events
+
 
 
 # Inspired by 

@@ -3,6 +3,9 @@
         "_id": {
             "bsonType": "objectId"
         },
+        "event_description": {
+            "bsonType": "string"
+        },
         "event_identifier": {
             "bsonType": "string"
         },
@@ -18,13 +21,30 @@
                         "bsonType": "int"
                     },
                     "price": {
-                        "bsonType": "double"
+                        "bsonType": "int"
                     },
                     "sold": {
                         "bsonType": "long"
+                    },
+                    "waitlist": {
+                        "bsonType": "array",
+                        "items": {
+                            "bsonType": "object",
+                            "properties": {
+                                "email": {
+                                    "bsonType": "string"
+                                },
+                                "user_id": {
+                                    "bsonType": "string"
+                                }
+                            }
+                        }
                     }
                 }
             }
+        },
+        "user_id": {
+            "bsonType": "string"
         }
     },
     "title": "event"

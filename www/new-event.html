@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>event0 | new event</title>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.13.1/fc-4.2.1/fh-3.3.1/r-2.4.0/datatables.min.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik+Microbe&display=swap" rel="stylesheet">
+        <style>
+            *{
+                box-sizing: border-box;
+            }
+            body{
+                background-color: #3498DB;
+                background: url("https://storage.googleapis.com/blog-images-backup/0*I-sI3u34g0ydRqyA");
+                background-size: cover;
+                font-family: "Arial", sans-serif;
+                padding: 50px;
+            }
+            .container{
+                margin: 20px auto;
+                padding: 10px;
+                width: 300px;
+                background-color: #fff;
+                border-radius: 5px;
+            }
+            .container-2{
+                margin: 20px auto;
+                padding: 10px;
+                width: 100%;
+                background-color: #fff;
+                border-radius: 5px;
+            }
+             h1{
+                 width: 70%;
+                color: #777;
+                font-size: 32px;
+                margin: 28px auto;
+                margin-bottom: 20px;
+                text-align: center;
+                /*padding-top: 40px;*/
+            }
+            form{
+                /*padding: 15px;*/
+                text-align: center;
+            }
+            input{
+                padding: 12px 0;
+                margin-bottom: 10px;
+                border-radius: 3px;
+                border: 2px solid transparent;
+                text-align: center;
+                width: 90%;
+                font-size: 16px;
+                transition: border .2s, background-color .2s;
+            }
+            form .field{
+                background-color: #ECF0F1;
+            }
+            form .field:focus {
+                border: 2px solid #3498DB;
+            }
+            form .btn{
+                background-color: #3498DB;
+                color: #fff;
+                line-height: 25px;
+                cursor: pointer;
+            }
+            form .btn:hover,
+            form .btn:active {
+                background-color: #1F78B4;
+                border: 2px solid #1F78B4;
+            }
+            .pass-link{
+                text-align: center;
+            }
+            .pass-link a:link,
+            .pass-link a:visited{
+                font-size: 12px;
+                color: #777;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header" style="font-family: 'Rubik Microbe', cursive;">
+            <h1 style="letter-spacing: 3px;font-size: 3rem;color:white;">event0 - new event</h1>
+        </div>
+        <div id="auth">
+            <div class="container">
+                <img style="width:100%;padding-bottom:1em;" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
+                <form action="#">
+                    <label>Event Name</label>
+                    <input id="input-eventname" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="NEW EVENT"/>
+                    <label>Event Description</label>
+                    <input id="input-eventdescr" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="IT WILL BE LIT"/>
+                    <label>Ticket Info</label><br />
+                    <textarea style="width:100%;height:4rem;" id="ticket-json" placeholder='[{"label":"General Admission","price":10,"max2sell":100}]' >[{"label":"General Admission","price":10,"max2sell":100}]</textarea>
+                    <hr />
+                    <label>E-mail</label>
+                    <input id="input-username" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
+                    <label>Password</label>
+                    <input id="input-password" type="password" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>    
+                    <input type="button" value="create new event" class="btn" id="new-btn" />
+                </form>
+                <div class="pass-link">
+                    <a href="#" >Ticketing for hoomans</a>
+                </div>	
+            </div>
+        </div>
+
+        
+        
+
+        <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function () {
+
+                window.app = new Realm.App({ id: "application-2-ntsvm" });
+                    async function loginEmailPassword(email, password) {
+                        // Create an email/password credential
+                        const credentials = Realm.Credentials.emailPassword(email, password);
+                        try {
+                            // Authenticate the user
+                            const user = await app.logIn(credentials);
+                            // `App.currentUser` updates to match the logged in user
+                            console.assert(user.id === app.currentUser.id);
+                            return user;
+                        } catch (err) {
+                            console.error("Failed to log in", err);
+                        }
+                };
+
+                $("#new-btn").off('click').on("click",function(){
+                    let email = $("#input-username").val();
+                    let password = $("#input-password").val();
+                    let event_label = $("#input-eventname").val();
+                    let event_tickets = JSON.parse($("#ticket-json").val().trim());
+                    event_tickets.forEach((t)=>{
+                        t['sold'] = 0;
+                        t['waitlist'] = [];
+                        t['price'] = parseFloat(String(t['price']));
+                    });
+                    console.log('event_tickets',event_tickets);
+
+                    let event_descr = $("#input-eventdescr").val();
+                    if(window.app.currentUser){
+                        window.app.currentUser.functions.createEvent(event_label,event_tickets,event_descr).then((y)=>{
+                            console.log('y',y);
+                        });
+                    }else{
+                        loginEmailPassword(document.getElementById("input-username").value, document.getElementById("input-password").value).then((x)=>{
+                            console.log('x',x);
+                            if(x){
+                                window.app.currentUser.functions.createEvent(event_label).then((y)=>{
+                                    console.log('y',y);
+                                    if(y){
+                                        alert('Event created.');
+                                    }else{
+                                        alert('No bueno.');
+                                    }
+                                });
+                            }else{
+                                alert('auth error')
+                            }
+                            
+                        });
+                    }
+                    
+                })
+            });
+            
+        </script>
+    </body>
+</html>

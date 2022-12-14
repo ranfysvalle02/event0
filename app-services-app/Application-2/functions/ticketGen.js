@@ -1,5 +1,5 @@
 // This function is the endpoint's request handler.
-exports = async function(ticket_type,email) {
+exports = async function(ticket_type,email,event_identifier) {
     
     const tix = context.services
       .get("mongodb-atlas")
@@ -11,7 +11,7 @@ exports = async function(ticket_type,email) {
       .db("demo_event0")
       .collection("events");
     
-    let demoEvt = await evt.findOne({"event_identifier":"DEMO"});
+    let demoEvt = await evt.findOne({"event_identifier":event_identifier});
     
     let user_id = context.user.id;
     
@@ -27,14 +27,14 @@ exports = async function(ticket_type,email) {
       let t = demoEvt.tickets[i];
       if(tt == t.label){
         if(t.max2sell > t.sold){
-          evtUpdate = await evt.updateOne({event_identifier:"DEMO","tickets.label":t.label},{$inc:{
+          evtUpdate = await evt.updateOne({event_identifier:event_identifier,"tickets.label":t.label},{$inc:{
             'tickets.$.sold':1
           }});
           tixTypeFound = true;
           break;
         }
         if(t.max2sell == t.sold){
-          evtUpdate = await evt.updateOne({event_identifier:"DEMO","tickets.label":t.label},{$addToSet:{
+          evtUpdate = await evt.updateOne({event_identifier:event_identifier,"tickets.label":t.label},{$addToSet:{
             'tickets.$.waitlist':{
               user_id:user_id,
               email:email
@@ -51,7 +51,7 @@ exports = async function(ticket_type,email) {
       
       const result = await tix.insertOne({
                 "access_type": tt,
-                "event_identifier": "DEMO",
+                "event_identifier": event_identifier,
                 "email": String(email),
                 "user_id":user_id,
                 "scanned": false

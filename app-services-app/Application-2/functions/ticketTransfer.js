@@ -1,4 +1,4 @@
-exports = async function(ticket_type) {
+exports = async function(ticket_type,e_id) {
     const tix = context.services
       .get("mongodb-atlas")
       .db("demo_event0")
@@ -11,7 +11,7 @@ exports = async function(ticket_type) {
     
     let source = context.user.id;
     let target = '';
-    let e = await evts.findOne({event_identifier:"DEMO"});
+    let e = await evts.findOne({event_identifier:e_id});
     let newWL = [];
     let targetUserId = '';
     
@@ -38,7 +38,7 @@ exports = async function(ticket_type) {
             }
           })  
         }
-        evtUpdate = await evts.updateOne({event_identifier:"DEMO","tickets.label":ticket_type},{$set:{"tickets.$.waitlist":newWL}});//"pokemon.$.name": "Agumon"
+        evtUpdate = await evts.updateOne({event_identifier:e_id,"tickets.label":ticket_type},{$set:{"tickets.$.waitlist":newWL}});//"pokemon.$.name": "Agumon"
       }
     }
     

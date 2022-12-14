@@ -56,16 +56,27 @@
             <h1 style="letter-spacing: 3px;font-size: 3rem;text-align:center;color:white;">event0</h1>
         </div>
         <div class="content-to-hide-when-small">
-            <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:25%;float:left;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=63940b58-d836-4c07-85c2-609d85c6caca&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
-            <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:25%;float:right;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=e8a2d77a-bb99-4582-983d-0bb11497969e&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
+            <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:25%;float:left;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=6398e3ea-721a-4803-8a2c-8d36d7fd543e&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
+            <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:25%;float:right;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=6398e480-3ba8-4a5e-89aa-040f211d1f1c&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
         </div>
-        
+        <div style="text-align: center;">
+            <label>
+                <b>Description</b>
+            </label>
+            <p id="event_descr">
+
+            </p>
+        </div>
         <div id="auth">
-            <div id="buy-section" class="container">
+            <div id="pre-buy" class="container">
+                <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
+                <button type="button" style="width:100%;color:black;cursor:pointer; font-weight:bold; letter-spacing:5px;padding:1em;background:green;" onClick="$('#pre-buy').hide();$('#buy-section').show();">BUY TICKET</button>                
+            </div>
+            <div id="buy-section" class="container" style="display: none;">
+                
                 <label>Ticket Type:</label>
                 <select id="ticket-type">
-                    <option value="General Admission">General Admission</option>
-                    <option value="VIP">VIP</option>
+
                 </select>
                 <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
                 <label>E-mail</label>
@@ -85,6 +96,9 @@
                 
             </div>
             
+            <div id="">
+                <h5>Is this your event? <a href="register.html">MANAGE</a></h5>
+            </div>
         </div>
 
         
@@ -92,6 +106,9 @@
 
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
         <script>
+            const params = new URLSearchParams(window.location.search);
+            let e_id = params.get("event_identifier")?params.get("event_identifier"):"DEMO";
+
             var letsGo = function(){
                 loginEmailPassword(document.getElementById("input-username").value, document.getElementById("input-password").value).then((x)=>{
                     console.log('x',x);
@@ -99,7 +116,7 @@
                         console.log('LOGIN FAILED');
                     }else{
                         console.log('user',x);
-                        window.app.currentUser.functions.ticketGen($("#ticket-type").val(),$("#input-username").val()).then((y)=>{
+                        window.app.currentUser.functions.ticketGen($("#ticket-type").val(),$("#input-username").val(), e_id).then((y)=>{
                             console.log('y',y);
                             let s = y;
                             if(s.waitlist){
@@ -129,6 +146,18 @@
                     console.error("Failed to log in", err);
                 }
             };
+
+            $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/available?event_id="+encodeURIComponent(e_id)).then((x)=>{
+                console.log('x',x); //use ctt
+                $("#ticket-type").html('');
+                let tmpHTML = "";
+                Object.keys(x.data).forEach((k)=>{
+                    tmpHTML += "<option value='"+k+"'>"+k+"</option>";
+                    console.log('tmpHTML',tmpHTML);
+                    $("#ticket-type").html(tmpHTML); 
+                })
+                $("#event_descr").html(x.event)
+            });
         </script>
     </body>
 </html>

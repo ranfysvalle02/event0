@@ -1,4 +1,41 @@
 {
     "collection": "events",
-    "database": "demo_event0"
+    "database": "demo_event0",
+    "roles": [
+        {
+            "name": "updateTicketStatus",
+            "apply_when": {},
+            "fields": {
+                "tickets": {
+                    "write": true,
+                    "read": true
+                }
+            },
+            "insert": true,
+            "additional_fields": {
+                "write": true,
+                "read": true
+            }
+        },
+        {
+            "name": "readAll",
+            "apply_when": {},
+            "read": true,
+            "write": false,
+            "insert": false,
+            "delete": false,
+            "search": true
+        },
+        {
+            "name": "readAndWriteAll",
+            "apply_when": {
+                "user_id": "%%user.id"
+            },
+            "read": true,
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "search": false
+        }
+    ]
 }

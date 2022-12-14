@@ -29,5 +29,21 @@
         "name": "ticketGen",
         "private": false,
         "disable_arg_logs": true
+    },
+    {
+        "name": "createEvent",
+        "private": false
+    },
+    {
+        "name": "api_availableTickets",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "getEventData",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
     }
 ]
