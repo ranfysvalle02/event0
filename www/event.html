@@ -97,7 +97,7 @@
             </div>
             
             <div id="">
-                <h5>Is this your event? <a href="#">MANAGE</a></h5>
+                <h5>Is this your event? <a id="edit-evt" href="">MANAGE</a></h5>
             </div>
         </div>
 
@@ -108,7 +108,8 @@
         <script>
             const params = new URLSearchParams(window.location.search);
             let e_id = params.get("event_identifier")?params.get("event_identifier"):"DEMO";
-
+            $("#edit-evt").attr('href',"edit-event.html?event_identifier="+e_id);
+            
             var letsGo = function(){
                 loginEmailPassword(document.getElementById("input-username").value, document.getElementById("input-password").value).then((x)=>{
                     console.log('x',x);

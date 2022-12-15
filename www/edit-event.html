@@ -86,18 +86,16 @@
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
-            <h1 style="letter-spacing: 3px;font-size: 3rem;color:white;">event0 - new event</h1>
+            <h1 style="letter-spacing: 3px;font-size: 3rem;color:white;">event0 - edit event</h1>
         </div>
         <div id="auth">
             <div class="container">
-                <div style="width:100%;height:12em;">
+                <div style="width:100%;">
                     <h4>Tickets</h4>
                     <pre id="json-display" ></pre>
                 </div>
                 
                 <form action="#">
-                    <label>Event Name</label>
-                    <input id="input-eventname" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="NEW EVENT"/>
                     <label>Event Description</label>
                     <input id="input-eventdescr" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="IT WILL BE LIT"/>
                    
@@ -105,7 +103,7 @@
                     <input id="input-username" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
                     <label>Password</label>
                     <input id="input-password" type="password" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>    
-                    <input type="button" value="create new event" class="btn" id="new-btn" />
+                    <input type="button" value="update event" class="btn" id="new-btn" />
                 </form>
                 <div class="pass-link">
                     <a href="#" >Ticketing for hoomans</a>
@@ -131,7 +129,20 @@
         </script>
         <script>
             $(document).ready(function () {
-
+                const params = new URLSearchParams(window.location.search);
+                let e_id = params.get("event_identifier")?params.get("event_identifier"):"DEMO";
+                
+                $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/available?event_id="+encodeURIComponent(e_id)).then((x)=>{
+                    console.log('x',x); //use ctt
+                    $("#input-eventdescr").val(x.event);
+                    //loop through event tickets and generate JSON 
+                    let eJSON = [];
+                    let tmpKeys = Object.keys(x.data);
+                    tmpKeys.forEach((k)=>{
+                        eJSON.push({label:k, price: x.data[k]['price'], max2sell: x.data[k]['max2sell']})
+                    });
+                    editor.load(eJSON);
+                });
                 window.app = new Realm.App({ id: "application-2-ntsvm" });
                     async function loginEmailPassword(email, password) {
                         // Create an email/password credential
@@ -150,7 +161,7 @@
                 $("#new-btn").off('click').on("click",function(){
                     let email = $("#input-username").val();
                     let password = $("#input-password").val();
-                    let event_label = $("#input-eventname").val();
+                    let event_label = e_id;
                     let event_tickets = (editor.get());
                     console.log('foreach',event_tickets);
                     event_tickets.forEach((t)=>{
@@ -162,10 +173,10 @@
 
                     let event_descr = $("#input-eventdescr").val();
                     if(window.app.currentUser){
-                        window.app.currentUser.functions.createEvent(event_label,event_tickets,event_descr).then((y)=>{
+                        window.app.currentUser.functions.updateEvent(event_label,event_tickets,event_descr).then((y)=>{
                             console.log('y',y);
                             if(y){
-                                alert('Event created.');
+                                alert('Event updated.');
                             }else{
                                 alert('No bueno.');
                             }
@@ -174,10 +185,10 @@
                         loginEmailPassword(document.getElementById("input-username").value, document.getElementById("input-password").value).then((x)=>{
                             console.log('x',x);
                             if(x){
-                                window.app.currentUser.functions.createEvent(event_label,event_tickets,event_descr).then((y)=>{
+                                window.app.currentUser.functions.updateEvent(event_label,event_tickets,event_descr).then((y)=>{
                                     console.log('y',y);
                                     if(y){
-                                        alert('Event created.');
+                                        alert('Event updated.');
                                     }else{
                                         alert('No bueno.');
                                     }
