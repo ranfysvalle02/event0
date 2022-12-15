@@ -9,7 +9,13 @@ exports = async function({ query, headers, body}, response) {
   let waitList = {data:{}};
   for(let i = 0; i < x.tickets.length; i++){
     let ctix = x.tickets[i];
-    waitList['data'][String(ctix.label)] = ctix.waitlist.length;
+    if(!waitList['data'][String(ctix.label)]){
+      waitList['data'][String(ctix.label)] = {};
+      waitList['data'][String(ctix.label)]['len'] =  ctix.waitList? ctix.waitList.length : 0;
+      waitList['data'][String(ctix.label)]['price'] =  ctix.price;
+      waitList['data'][String(ctix.label)]['max2sell'] =  ctix.max2sell;
+        
+    }
   }
   waitList['event'] = x.event_description;
   return waitList;
