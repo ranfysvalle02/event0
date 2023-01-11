@@ -20,7 +20,7 @@ Yup. The whole thing is hosted on MongoDB Atlas free tier.
 - embedded Atlas Charts using "On-Demand Materialized Views" @ Event Page
 - QR Scanner / Checkin for Event Admin
 - Secure with App Services Authentication / Rules / Realm-Web SDK
-- Find Events
+- Find Events (GraphQL behind the scenes)
 - Create Events
 - Edit Events
 
@@ -37,7 +37,7 @@ https://event0-ssxjd.mongodbstitch.com/new-event.html -> Create new event
 
 https://event0-ssxjd.mongodbstitch.com/edit-event.html -> Edit event
 
-https://event0-ssxjd.mongodbstitch.com/all-events.html -> Browse all events
+https://event0-ssxjd.mongodbstitch.com/all-events.html -> Browse all events (Using GraphQL without APOLLO)
 
 
 

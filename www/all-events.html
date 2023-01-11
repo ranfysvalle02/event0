@@ -164,6 +164,45 @@
                         console.log('LOGIN FAILED');
                     }else{
                         console.log('user',x);
+                        const getEvents = () => `{ events { _id event_identifier event_description } }`;
+                        const options = {
+                            method: "post",
+                            headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer "+x._accessToken
+                            },
+                            body: JSON.stringify({
+                            query: getEvents()
+                            })
+                        };
+                    
+                        fetch(`https://us-east-1.aws.realm.mongodb.com/api/client/v2.0/app/application-2-ntsvm/graphql`, options)
+                            .then(res => res.json())
+                            .then((y)=>{
+                                console.log('y.data',y.data);
+                                if(y.data){
+                                    window.dt = $('#example').DataTable({
+                                        responsive:true,
+                                        fixedHeader:true,
+                                        data: y.data.events,
+                                        columns: [
+                                            { data: '_id',"render": function ( data, type, row, meta ) {
+                                                console.log('data',data);
+                                                return '<img style="max-width:3em;" src="https://api.qrserver.com/v1/create-qr-code/?data='+encodeURIComponent("event::"+data)+'">';
+                                            }},
+                                            { data: 'event_identifier',"render": function ( data, type, row, meta ) {
+                                                console.log('data',data);
+                                                return '<a href="event.html?event_identifier='+encodeURIComponent(data)+'">'+data+'</a>';
+                                            }},
+                                            { data: 'event_description' },
+                                        ],
+                                    });
+                                    $("#auth").hide();
+                                    $("#wrapper").show();
+                                }
+                            });
+
+                        /*
                         window.app.currentUser.functions.getEventData().then((y)=>{
                             console.log('y',y);
                             if(y){
@@ -187,7 +226,7 @@
                                 $("#wrapper").show();
                             }
                         });
-                        
+                        */
                     }
                 });
             });
