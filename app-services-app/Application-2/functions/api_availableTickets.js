@@ -18,5 +18,6 @@ exports = async function({ query, headers, body}, response) {
     }
   }
   waitList['event'] = x.event_description;
+  waitList['x'] = x;
   return waitList;
 };

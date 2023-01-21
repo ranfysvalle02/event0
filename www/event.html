@@ -9,51 +9,12 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Rubik+Microbe&display=swap" rel="stylesheet">
-        <style>
-            *{
-                box-sizing: border-box;
-            }
-            body{
-                background-color: #3498DB;
-                background: url("https://storage.googleapis.com/blog-images-backup/0*I-sI3u34g0ydRqyA");
-                background-size: cover;
-                font-family: "Arial", sans-serif;
-                padding: 50px;
-            }
-            .container{
-                margin: 20px auto;
-                padding: 10px;
-                width: 300px;
-                background-color: #fff;
-                border-radius: 5px;
-            }
-            .container-2{
-                margin: 20px auto;
-                padding: 10px;
-                width: 100%;
-                background-color: #fff;
-                border-radius: 5px;
-            }
-             h1{
-                 width: 70%;
-                color: #777;
-                font-size: 32px;
-                margin: 28px auto;
-                margin-bottom: 20px;
-                text-align: center;
-                /*padding-top: 40px;*/
-            }
-            @media (max-width: 767px) {                  
-                .content-to-hide-when-small {
-                    display: none;
-                }
-            }
-        </style>
+        <link href="main.css" rel="stylesheet">
         <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
-            <h1 style="letter-spacing: 3px;font-size: 3rem;text-align:center;color:white;">event0</h1>
+            <h1 style="letter-spacing: 3px;font-size: 3rem;text-align:center;color:white;"><a href="index.html" style="color:white;">event0</a></h1>
         </div>
         <div class="content-to-hide-when-small">
             <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:25%;float:left;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=6398e3ea-721a-4803-8a2c-8d36d7fd543e&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
@@ -74,15 +35,13 @@
             </div>
             <div id="buy-section" class="container" style="display: none;">
                 
-                <label>Ticket Type:</label>
-                <select id="ticket-type">
+                
+                <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
+                <label>Ticket Type:</label><br />
+                <select id="ticket-type" style="width: 100%;">
 
                 </select>
-                <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
-                <label>E-mail</label>
-                <input id="input-username" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
-                <label>Password</label>
-                <input id="input-password" type="password" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
+                <hr />
                 
                 <button type="button" style="width:100%;color:black;cursor:pointer; font-weight:bold; letter-spacing:5px;padding:1em;background:green;" onClick="letsGo()">BUY TICKET</button>                
                 <hr />
@@ -96,7 +55,7 @@
                 
             </div>
             
-            <div id="">
+            <div id="manage-evt" style="display: none;">
                 <h5>Is this your event? <a id="edit-evt" href="">MANAGE</a></h5>
             </div>
         </div>
@@ -111,45 +70,34 @@
             $("#edit-evt").attr('href',"edit-event.html?event_identifier="+e_id);
             
             var letsGo = function(){
-                loginEmailPassword(document.getElementById("input-username").value, document.getElementById("input-password").value).then((x)=>{
-                    console.log('x',x);
-                    if(!x){
-                        console.log('LOGIN FAILED');
-                    }else{
-                        console.log('user',x);
-                        window.app.currentUser.functions.ticketGen($("#ticket-type").val(),$("#input-username").val(), e_id).then((y)=>{
-                            console.log('y',y);
-                            let s = y;
-                            if(s.waitlist){
-                                alert("Ticket was sold out, but we've added you to the waitlist.");
-                            }
-                            if(s.ticket){
-                                $("#ticket-img").attr('src',String(s.ticket));
-                                $("#buy-section").hide();
-                                $("#ticket-section").show();
-                            }
-                        });
-                        
+                
+                window.app.currentUser.functions.ticketGen($("#ticket-type").val(),window.app.currentUser._profile.data.email, e_id).then((y)=>{
+                    console.log('y',y);
+                    let s = y;
+                    if(s.waitlist){
+                        alert("Ticket was sold out, but we've added you to the waitlist.");
+                    }
+                    if(s.ticket){
+                        $("#ticket-img").attr('src',String(s.ticket));
+                        $("#buy-section").hide();
+                        $("#ticket-section").show();
                     }
                 });
             }
             window.app = new Realm.App({ id: "application-2-ntsvm" });
-            async function loginEmailPassword(email, password) {
-                // Create an email/password credential
-                const credentials = Realm.Credentials.emailPassword(email, password);
-                try {
-                    // Authenticate the user
-                    const user = await app.logIn(credentials);
-                    // `App.currentUser` updates to match the logged in user
-                    console.assert(user.id === app.currentUser.id);
-                    return user;
-                } catch (err) {
-                    console.error("Failed to log in", err);
-                }
-            };
+            if(!window.app.currentUser){
+                alert('Please login!')
+                window.location.href = "login.html";
+            }else{
+                console.log('already logged in',window.app.currentUser);
+            }
 
             $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/available?event_id="+encodeURIComponent(e_id)).then((x)=>{
                 console.log('x',x); //use ctt
+
+                if(x.x.user_id == window.app.currentUser.id){
+                    $("#manage-evt").show();
+                }
                 $("#ticket-type").html('');
                 let tmpHTML = "";
                 Object.keys(x.data).forEach((k)=>{

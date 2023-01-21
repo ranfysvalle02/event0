@@ -15,53 +15,24 @@
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
-            <h1 style="letter-spacing: 3px;font-size: 3rem;color:white;">event0 - tickets</h1>
+            <h1 style="letter-spacing: 3px;font-size: 3rem;color:white;">event0 - login</h1>
         </div>
-        <div class="topnav" id="myTopnav">
-            <a href="index.html" class="active">Home</a>
-            <a href="all-events.html">Events</a>
-            <a href="new-event.html">New Event</a>
-            <a href="#about">About</a>
-            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-                <i class="fa fa-bars"></i>
-            </a>
-        </div>
-
-        <div id="wrapper" style="display:block;"> 
-            
-            <div>
-                <label>Ticket Transfer: </label>
-                <br />
-                <select id="select-evt-id">
-                    
-                </select>
-                <select id="select-tt">
-
-                </select>
-                <button type="button" onclick="letsTransfer()">transfer</button>
+        <div id="auth">
+            <div class="container">
+                <img style="width:100%;padding-bottom:1em;" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
+                <form action="#">
+                    <label>E-mail</label>
+                    <input id="input-username" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
+                    <label>Password</label>
+                    <input id="input-password" type="password" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>    
+                    <input type="button" value="login" class="btn" id="login-btn" />
+                </form>
+                <h5>Don't have an account? <a href="register.html">REGISTER</a></h5>
             </div>
-<hr />
-            <table id="example" class="display" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>access_type</th>
-                        <th>event_identifier</th>
-                        <th>email</th>
-                        <th>scanned</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>id</th>
-                        <th>access_type</th>
-                        <th>event_identifier</th>
-                        <th>email</th>
-                        <th>scanned</th>
-                    </tr>
-                </tfoot>
-            </table>
+            
         </div>
+
+        
         
 
 
@@ -110,11 +81,17 @@
             };
             
             //check sessionStorage
-            if(!window.app.currentUser){
-                alert('Please login!')
-                window.location.href = "login.html";
-            }else{
-                window.app.currentUser.functions.getData().then((y)=>{
+
+
+            $("#login-btn").off('click').on('click',function(){ 
+                loginEmailPassword(document.getElementById("input-username").value, document.getElementById("input-password").value).then((x)=>{
+                    console.log('x',x);
+                    localStorage.setItem('_accessToken',x._accessToken);
+                    if(!x){
+                        console.log('LOGIN FAILED');
+                    }else{
+                        console.log('user',x);
+                        window.app.currentUser.functions.getData().then((y)=>{
                             console.log('y',y);
                             let options = {};
                             let ticketOptions = {};
@@ -164,9 +141,13 @@
                                 });
                                 $("#auth").hide();
                                 $("#wrapper").show();
+                                window.location.href = "index.html";
                             }
                         });
-            }
+                        
+                    }
+                });
+            });
             
         });
     </script>

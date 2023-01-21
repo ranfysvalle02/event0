@@ -9,103 +9,27 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Rubik+Microbe&display=swap" rel="stylesheet">
-        <style>
-            *{
-                box-sizing: border-box;
-            }
-            body{
-                background-color: #3498DB;
-                background: url("https://storage.googleapis.com/blog-images-backup/0*I-sI3u34g0ydRqyA");
-                background-size: cover;
-                font-family: "Arial", sans-serif;
-                padding: 50px;
-            }
-            .container{
-                margin: 20px auto;
-                padding: 10px;
-                width: 300px;
-                background-color: #fff;
-                border-radius: 5px;
-            }
-            .container-2{
-                margin: 20px auto;
-                padding: 10px;
-                width: 100%;
-                background-color: #fff;
-                border-radius: 5px;
-            }
-             h1{
-                 width: 70%;
-                color: #777;
-                font-size: 32px;
-                margin: 28px auto;
-                margin-bottom: 20px;
-                text-align: center;
-                /*padding-top: 40px;*/
-            }
-            form{
-                /*padding: 15px;*/
-                text-align: center;
-            }
-            input{
-                padding: 12px 0;
-                margin-bottom: 10px;
-                border-radius: 3px;
-                border: 2px solid transparent;
-                text-align: center;
-                width: 90%;
-                font-size: 16px;
-                transition: border .2s, background-color .2s;
-            }
-            form .field{
-                background-color: #ECF0F1;
-            }
-            form .field:focus {
-                border: 2px solid #3498DB;
-            }
-            form .btn{
-                background-color: #3498DB;
-                color: #fff;
-                line-height: 25px;
-                cursor: pointer;
-            }
-            form .btn:hover,
-            form .btn:active {
-                background-color: #1F78B4;
-                border: 2px solid #1F78B4;
-            }
-            .pass-link{
-                text-align: center;
-            }
-            .pass-link a:link,
-            .pass-link a:visited{
-                font-size: 12px;
-                color: #777;
-            }
-        </style>
-
+        <link href="main.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
             <h1 style="letter-spacing: 3px;font-size: 3rem;color:white;">event0 - events</h1>
         </div>
-        <div id="auth">
-            <div class="container">
-                <img style="width:100%;padding-bottom:1em;" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80" />
-                <form action="#">
-                    <label>E-mail</label>
-                    <input id="input-username" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>
-                    <label>Password</label>
-                    <input id="input-password" type="password" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" value="demo@demo.com"/>    
-                    <input type="button" value="login" class="btn" id="login-btn" />
-                </form>
-                <h5>Don't have an account? <a href="register.html">REGISTER</a></h5>
-            </div>
-            
+        
+        <div class="topnav" id="myTopnav">
+            <a href="index.html">Home</a>
+            <a href="all-events.html" class="active">Events</a>
+            <a href="new-event.html">New Event</a>
+            <a href="#about">About</a>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
         </div>
 
-        <div id="wrapper" style="display:none;"> 
+
+        <div id="wrapper" style="display:block;"> 
             <h5>Don't see the event you are looking for? <a href="new-event.html">CREATE ONE</a></h5>
 
             <table id="example" class="display" style="width:100%">
@@ -130,7 +54,16 @@
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.13.1/fc-4.2.1/fh-3.3.1/r-2.4.0/datatables.min.js"></script>
-   
+    <script>
+    function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+            x.className = "topnav";
+        }
+    }
+    </script>
    <script>
         var letsTransfer = function(){
             window.app.currentUser.functions.ticketTransfer($("#select-tt").val()).then((x)=>{
@@ -142,34 +75,17 @@
         $(document).ready(function () {
             
             window.app = new Realm.App({ id: "application-2-ntsvm" });
-            async function loginEmailPassword(email, password) {
-                // Create an email/password credential
-                const credentials = Realm.Credentials.emailPassword(email, password);
-                try {
-                    // Authenticate the user
-                    const user = await app.logIn(credentials);
-                    // `App.currentUser` updates to match the logged in user
-                    console.assert(user.id === app.currentUser.id);
-                    return user;
-                } catch (err) {
-                    console.error("Failed to log in", err);
-                }
-            };
-            
-            
-            $("#login-btn").off('click').on('click',function(){ 
-                loginEmailPassword(document.getElementById("input-username").value, document.getElementById("input-password").value).then((x)=>{
-                    console.log('x',x);
-                    if(!x){
-                        console.log('LOGIN FAILED');
-                    }else{
-                        console.log('user',x);
+            if(!window.app.currentUser){
+                alert('Please login!')
+                window.location.href = "login.html";
+            }else{
+                        console.log('user',window.app.currentUser);
                         const getEvents = () => `{ events { _id event_identifier event_description } }`;
                         const options = {
                             method: "post",
                             headers: {
                             "Content-Type": "application/json",
-                            "Authorization": "Bearer "+x._accessToken
+                            "Authorization": "Bearer "+window.app.currentUser._accessToken
                             },
                             body: JSON.stringify({
                             query: getEvents()
@@ -202,34 +118,10 @@
                                 }
                             });
 
-                        /*
-                        window.app.currentUser.functions.getEventData().then((y)=>{
-                            console.log('y',y);
-                            if(y){
-                                window.dt = $('#example').DataTable({
-                                    responsive:true,
-                                    fixedHeader:true,
-                                    data: y.data,
-                                    columns: [
-                                        { data: '_id',"render": function ( data, type, row, meta ) {
-                                            console.log('data',data);
-                                            return '<img style="max-width:3em;" src="https://api.qrserver.com/v1/create-qr-code/?data='+encodeURIComponent("event::"+data)+'">';
-                                        }},
-                                        { data: 'event_identifier',"render": function ( data, type, row, meta ) {
-                                            console.log('data',data);
-                                            return '<a href="event.html?event_identifier='+encodeURIComponent(data)+'">'+data+'</a>';
-                                        }},
-                                        { data: 'event_description' },
-                                    ],
-                                });
-                                $("#auth").hide();
-                                $("#wrapper").show();
-                            }
-                        });
-                        */
                     }
-                });
-            });
+            
+            
+            
         });
     </script>
     </body>
