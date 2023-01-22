@@ -125,6 +125,7 @@
                                 sku: 'samplesku',
                                 user_id: window.app.currentUser.id,
                                 ticket_type: $("#ticket-type").val(),
+                                event_id: params.get("event_identifier")?params.get("event_identifier"):"DEMO",
                                 email: window.app.currentUser._profile.data.email,
                                 image: 'https://event0-ssxjd.mongodbstitch.com/small-tix.png'
                             }
@@ -162,6 +163,7 @@
                                     sku: 'samplesku',
                                     user_id: window.app.currentUser.id,
                                     ticket_type: ticketKeys[0],
+                                    event_id: params.get("event_identifier")?params.get("event_identifier"):"DEMO",
                                     email: window.app.currentUser._profile.data.email,
                                     image: 'https://event0-ssxjd.mongodbstitch.com/small-tix.png'
                                 }
