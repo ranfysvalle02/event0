@@ -20,14 +20,7 @@
             <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:25%;float:left;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=6398e3ea-721a-4803-8a2c-8d36d7fd543e&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
             <iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width:25%;float:right;" src="https://charts.mongodb.com/charts-rfv2-gryng/embed/charts?id=6398e480-3ba8-4a5e-89aa-040f211d1f1c&maxDataAge=30&theme=light&autoRefresh=true"></iframe>
         </div>
-        <div style="text-align: center;">
-            <label>
-                <b>Description</b>
-            </label>
-            <p id="event_descr">
 
-            </p>
-        </div>
         <div id="auth">
             <div id="pre-buy" class="container">
                 <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
@@ -59,6 +52,29 @@
                 <h5>Is this your event? <a id="edit-evt" href="">MANAGE</a></h5>
             </div>
         </div>
+        <!-- Tab links -->
+        <div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">Description</button>
+            <button class="tablinks" onclick="openCity(event, 'Paris')">Photo Gallery</button>
+        </div>
+        
+        <!-- Tab content -->
+        <div id="London" class="tabcontent">
+            <h3>Description</h3>
+            <p id="event_descr">
+
+            </p>
+        </div>
+        
+        <div id="Paris" class="tabcontent">
+            <h3>Photos</h3>
+            <p>
+                <div class="powr-photo-gallery" id="be802383_1674349549"></div><script src="https://www.powr.io/powr.js?platform=html"></script>
+            </p>
+        </div>
+        
+        
+        
 
         
 
@@ -107,6 +123,33 @@
                 })
                 $("#event_descr").html(x.event)
             });
+        </script>
+        <script>
+            function openCity(evt, cityName) {
+                // Declare all variables
+                var i, tabcontent, tablinks;
+
+                // Get all elements with class="tabcontent" and hide them
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+
+                // Get all elements with class="tablinks" and remove the class "active"
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+
+                // Show the current tab, and add an "active" class to the button that opened the tab
+                document.getElementById(cityName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+            
+        </script>
+        <script>
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
         </script>
     </body>
 </html>
