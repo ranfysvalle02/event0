@@ -144,6 +144,9 @@
                 let price = window.tmp_event.data[ticketKeys[0]]['price'];
                 if(price > 0){
                     $("#buyButton").hide();
+                }else{
+                    $("#partiallyCheckoutBtn").hide();
+                    $("#buyButton").show();
                 }
                     document.partiallyButtonConfig = {
                         offer: '9d60a598-990d-403e-94bb-efb46dda5ce7',
