@@ -12,6 +12,15 @@ Yup. The whole thing is hosted on MongoDB Atlas free tier.
 - Platform does not support ticket resale until tickets are SOLD OUT
 - Resale == Ticket Ownership Transfer (no fee; no ticket scalping;)
 
+# Latest updates
+- Partial.ly integration for ticket price > 0.00;
+- Photo Gallery using iFrame (for event only)
+- Centralized 'Authentication'
+
+# Testing the DEMO
+- Please use a test credit card: 4242-4242-4242-4242; MM/DD: 12/25; CVC: 123
+
+
 # Demo Features
 - Register/Login
 - Purchase tickets
