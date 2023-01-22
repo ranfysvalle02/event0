@@ -23,6 +23,7 @@
             <a href="all-events.html" class="active">Events</a>
             <a href="new-event.html">New Event</a>
             <a href="#about">About</a>
+            <a href="#" onclick="window.app.currentUser.logOut()" style="color:red;font-weight:bold;float:right;">logout</a>
             <a href="javascript:void(0);" class="icon" onclick="myFunction()">
                 <i class="fa fa-bars"></i>
             </a>
@@ -96,6 +97,10 @@
                             .then(res => res.json())
                             .then((y)=>{
                                 console.log('y.data',y.data);
+                                if(!y.data){
+                                    console.log('Something went wrong - Please re-authenticate')
+                                    window.href = "login.html";
+                                }
                                 if(y.data){
                                     window.dt = $('#example').DataTable({
                                         responsive:true,
