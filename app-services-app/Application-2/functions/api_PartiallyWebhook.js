@@ -1,6 +1,13 @@
-// This function is the endpoint's request handler.
-exports = async function(ticket_type,email,event_identifier,uid) {
-    
+exports = async function({ query, headers, body}, response) {
+  let arg = {};
+  const reqBody = body;
+  let bodyJSON = JSON.parse(reqBody.text());
+  let k = Object.keys(bodyJSON);
+  let res = {};
+  res = bodyJSON[k[0]]['payment_plan']['line_items'][0]['meta'];
+  console.log('xxx',JSON.stringify(res));
+  console.log('yyy',res['ticket_type'], res['email'],res['event_id']);
+  let tg = async function(ticket_type,email,event_identifier,uid){
     const tix = context.services
       .get("mongodb-atlas")
       .db("demo_event0")
@@ -13,8 +20,7 @@ exports = async function(ticket_type,email,event_identifier,uid) {
     
     let demoEvt = await evt.findOne({"event_identifier":event_identifier});
     
-    let user_id = context.user.id;
-    //uid ovverride
+    
     if(uid){user_id = uid;}
     
     tt = String(ticket_type);
@@ -64,5 +70,14 @@ exports = async function(ticket_type,email,event_identifier,uid) {
       return {"waitlist":true};
     }
     return {"err":"Ticket type unavailable."};  
-      
+  }
+  if(res['event_id']){
+    //plan is plaid, lets do the transaction
+    //exports = async function(ticket_type,email,event_identifier) {
+    var result = await tg(res['ticket_type'], res['email'],res['event_id'],res['user_id']);
+    bodyJSON = result;
+    
+  }
+  
+  return {arg: bodyJSON, res:res, body: bodyJSON[k[0]]};
 };

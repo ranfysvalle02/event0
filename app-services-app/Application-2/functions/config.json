@@ -49,5 +49,11 @@
     {
         "name": "updateEvent",
         "private": false
+    },
+    {
+        "name": "api_PartiallyWebhook",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
     }
 ]
