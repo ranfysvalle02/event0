@@ -24,7 +24,7 @@
         <div id="auth">
             <div id="pre-buy" class="container">
                 <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
-                <button type="button" style="width:100%;color:black;cursor:pointer; font-weight:bold; letter-spacing:5px;padding:1em;background:green;" onClick="$('#pre-buy').hide();$('#buy-section').show();">BUY TICKET</button>                
+                <button  type="button" style="width:100%;color:black;cursor:pointer; font-weight:bold; letter-spacing:5px;padding:1em;background:green;" onClick="$('#pre-buy').hide();$('#buy-section').show();">BUY TICKET</button>                
             </div>
             <div id="buy-section" class="container" style="display: none;">
                 
@@ -35,10 +35,10 @@
 
                 </select>
                 <hr />
+                <div id="partiallyCheckoutBtn"></div>
                 
-                <button type="button" style="width:100%;color:black;cursor:pointer; font-weight:bold; letter-spacing:5px;padding:1em;background:green;" onClick="letsGo()">BUY TICKET</button>                
-                <hr />
-                <h5>Don't have an account? <a href="register.html">REGISTER</a></h5>
+                <button id="buyButton" type="button" style="width:100%;color:black;cursor:pointer; font-weight:bold; letter-spacing:5px;padding:1em;background:green;" onClick="letsGo()">BUY TICKET</button>                
+                
             </div>
             <div id="ticket-section" class="container" style="display:none;margin: 0 auto;">
                 
@@ -107,10 +107,74 @@
             }else{
                 console.log('already logged in',window.app.currentUser);
             }
-
+            $("#ticket-type").off('change').on('change',function(){
+                let price = window.tmp_event.data[$("#ticket-type").val()]['price'];
+                document.partiallyButtonConfig = {
+                    offer: '9d60a598-990d-403e-94bb-efb46dda5ce7',
+                    amount: price,
+                    currency: 'USD',
+                    renderSelector: '#partiallyCheckoutBtn',
+                    meta: {
+                        items: [
+                            {
+                                id: 123,
+                                name: 'Sample product',
+                                quantity: 1,
+                                price: price,
+                                total: price,
+                                sku: 'samplesku',
+                                user_id: window.app.currentUser.id,
+                                ticket_type: $("#ticket-type").val(),
+                                email: window.app.currentUser._profile.data.email,
+                                image: 'https://event0-ssxjd.mongodbstitch.com/small-tix.png'
+                            }
+                        ]
+                    }
+                };
+                $("#partiallyCheckoutBtn").html('');
+                var btn = new PartiallyButton(document.partiallyButtonConfig);
+                btn.init();
+            });
             $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/available?event_id="+encodeURIComponent(e_id)).then((x)=>{
                 console.log('x',x); //use ctt
-
+                window.tmp_event = x;
+                console.log("xxx",window.tmp_event);
+                let ticketKeys = Object.keys(window.tmp_event.data);
+                let price = window.tmp_event.data[ticketKeys[0]]['price'];
+                if(price > 0){
+                    $("#buyButton").hide();
+                }
+                    document.partiallyButtonConfig = {
+                        offer: '9d60a598-990d-403e-94bb-efb46dda5ce7',
+                        amount: price,
+                        baseUrl: 'https://demo.partial.ly/',
+                        returnUrl: 'https://event0-ssxjd.mongodbstitch.com/index.html',
+                        currency: 'USD',
+                        renderSelector: '#partiallyCheckoutBtn',
+                        meta: {
+                            items: [
+                                {
+                                    id: 123,
+                                    name: 'Sample product',
+                                    quantity: 1,
+                                    price: price,
+                                    total: price,
+                                    sku: 'samplesku',
+                                    user_id: window.app.currentUser.id,
+                                    ticket_type: ticketKeys[0],
+                                    email: window.app.currentUser._profile.data.email,
+                                    image: 'https://event0-ssxjd.mongodbstitch.com/small-tix.png'
+                                }
+                            ]
+                        }
+                    };
+                (function() {
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://demo.partial.ly/js/partially-checkout-button.js';
+                script.async = true;
+                document.head.appendChild(script);
+                })();
                 if(x.x.user_id == window.app.currentUser.id){
                     $("#manage-evt").show();
                 }
@@ -151,5 +215,6 @@
         // Get the element with id="defaultOpen" and click on it
         document.getElementById("defaultOpen").click();
         </script>
+
     </body>
 </html>
