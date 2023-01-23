@@ -8,7 +8,7 @@ exports = async function(ticket_type,e_id) {
       .get("mongodb-atlas")
       .db("demo_event0")
       .collection("events");
-    
+    console.log('ticketTransfer',ticket_type,e_id);
     let source = context.user.id;
     let target = '';
     let e = await evts.findOne({event_identifier:e_id});
@@ -22,9 +22,14 @@ exports = async function(ticket_type,e_id) {
 
     for(let i = 0; i < e.tickets.length; i++){
       let ct = e.tickets[i];
-      if(ct.label == ticket_type){
-        //pick someone randomly 
-        let index = randomIntFromInterval(0,ct.waitlist.length);
+      if(ct.label == ticket_type && ct.waitlist.length > 0){
+        //special case - just one person
+        let index = 0;
+        if(ct.waitlist.length > 1){
+          //pick someone randomly 
+          index = randomIntFromInterval(0,ct.waitlist.length);  
+        }
+        console.log('index',index);
         let person = ct.waitlist[index];
         if(person){
           targetUserId = person.user_id;
@@ -39,15 +44,17 @@ exports = async function(ticket_type,e_id) {
           })  
         }
         evtUpdate = await evts.updateOne({event_identifier:e_id,"tickets.label":ticket_type},{$set:{"tickets.$.waitlist":newWL}});//"pokemon.$.name": "Agumon"
+        break;
       }
     }
-    
+    console.log('targetUserId',targetUserId);
+    console.log('target',target);
     //the above removes from the waitlist (can probably be done with $pull)
     //in between, when platform supports paid tickets - we could automagically handle the financial transaction. NO RESALE FEE
     //the below changes the ticket 
     if(targetUserId){
-      let ctix = await tix.updateOne({access_type:ticket_type,user_id:source},{$set:{user_id:targetUserId,email:target}});
-      return {ctix:ctix, evtUpdate:evtUpdate,newWL};  
+      let ctix = await tix.updateOne({event_identifier:e_id,access_type:ticket_type,user_id:source},{$set:{user_id:targetUserId,email:target}});
+      return {ctix:ctix, evtUpdate:evtUpdate};  
     }
     return {"err":"SOMETHING WENT WRONG WITH TICKET TRANSFER"};
     

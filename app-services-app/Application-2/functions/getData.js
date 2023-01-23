@@ -20,6 +20,10 @@ exports = async function(arg){
       .collection("tickets");
     
     let r = await tix.find({user_id:context.user.id}).toArray();
-    
-  return {data: r};
+    const events = context.services
+      .get("mongodb-atlas")
+      .db("demo_event0")
+      .collection("events");
+    let waitlist = await events.find({"tickets.waitlist.0":{"$exists":true}}).toArray();
+  return {data: r, waitlist:waitlist};
 };

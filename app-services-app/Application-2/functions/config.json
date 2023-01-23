@@ -22,8 +22,7 @@
     },
     {
         "name": "ticketTransfer",
-        "private": false,
-        "disable_arg_logs": true
+        "private": false
     },
     {
         "name": "ticketGen",

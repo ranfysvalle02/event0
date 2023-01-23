@@ -34,18 +34,7 @@
         </div>
 
         <div id="wrapper" style="display:block;"> 
-            
-            <div>
-                <label>Ticket Transfer: </label>
-                <br />
-                <select id="select-evt-id">
-                    
-                </select>
-                <select id="select-tt">
 
-                </select>
-                <button type="button" onclick="letsTransfer()">transfer</button>
-            </div>
 <hr />
             <table id="example" class="display" style="width:100%">
                 <thead>
@@ -54,7 +43,7 @@
                         <th>access_type</th>
                         <th>event_identifier</th>
                         <th>email</th>
-                        <th>scanned</th>
+                        <th>status</th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -63,7 +52,7 @@
                         <th>access_type</th>
                         <th>event_identifier</th>
                         <th>email</th>
-                        <th>scanned</th>
+                        <th>status</th>
                     </tr>
                 </tfoot>
             </table>
@@ -86,92 +75,85 @@
    <script>
         const params = new URLSearchParams(window.location.search);
         
-        var letsTransfer = function(){
-            window.app.currentUser.functions.ticketTransfer($("#select-tt").val(),$("#select-evt-id").val()).then((x)=>{
+        var letsTransfer = function(ticketType,eventId){
+            window.app.currentUser.functions.ticketTransfer(ticketType,eventId).then((x)=>{
                 console.log('ticket_transfer',x);
                 if(x.err){
                     alert(x.err);
                 }else{
-                    alert('Transfer successful!')
+                    alert('Transfer successful!');
+                    loadFreshData();
                 }
-                $("#select-evt-id").trigger("change");
             })
         };
-
+        function loadFreshData(){
+            window.app.currentUser.functions.getData().then((y)=>{
+                            console.log('y',y);
+                            let options = {};
+                            if(y){
+                                y.waitlist.forEach((ev)=>{
+                                    if(!options[ev.event_identifier]){
+                                        options[ev.event_identifier] = {};
+                                    }
+                                    ev.tickets.forEach((et)=>{
+                                        if(et.waitlist.length > 0){
+                                            options[ev.event_identifier][et.label] = true;
+                                        }
+                                    });
+                                });
+                                console.log('options',options);
+                                if(!window.dt){
+                                    window.dt = $('#example').DataTable({
+                                        responsive:true,
+                                        fixedHeader:true,
+                                        data: y.data,
+                                        columns: [
+                                            { data: '_id',"render": function ( data, type, row, meta ) {
+                                                console.log('data',data);
+                                                return '<img style="max-width:3em;" src="https://api.qrserver.com/v1/create-qr-code/?data='+encodeURIComponent(data)+'">';
+                                            }},
+                                            { data: 'access_type' },
+                                            { data: 'event_identifier',"render": function ( data, type, row, meta ) {
+                                                console.log('data',data);
+                                                return '<a href="event.html?event_identifier='+encodeURIComponent(data)+'">'+data+'</a>';
+                                            }},
+                                            { data: 'email' },
+                                            { data: 'scanned',"render": function ( data, type, row, meta ) {
+                                                console.log('row',row);
+                                                console.log('options',options);
+                                                console.log('options[row.event_identifier][row.access_type]',options[row.event_identifier]);
+                                                if(String(data).toLowerCase() == "true"){
+                                                    return '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
+                                                }else{
+                                                    if(options[row.event_identifier] && options[row.event_identifier][row.access_type]){
+                                                        return '<i class="fa fa-circle-o-notch" aria-hidden="true"></i><br /><a style="text-align:right;" href="#" onclick="letsTransfer(\''+row.access_type+'\',\''+row.event_identifier+'\');">transfer</a>';
+                                                    }
+                                                    return '<i class="fa fa-circle-o-notch" aria-hidden="true"></i>';
+                                                }
+                                                
+                                            }},
+                                        ],
+                                    });
+                                }else{
+                                    window.dt.clear();
+                                    window.dt.rows.add(y.data);
+                                    window.dt.draw();
+                                }
+                                
+                                $("#auth").hide();
+                                $("#wrapper").show();
+                            }
+                        });
+        }
         $(document).ready(function () {
             
             window.app = new Realm.App({ id: "application-2-ntsvm" });
-            async function loginEmailPassword(email, password) {
-                // Create an email/password credential
-                const credentials = Realm.Credentials.emailPassword(email, password);
-                try {
-                    // Authenticate the user
-                    const user = await app.logIn(credentials);
-                    // `App.currentUser` updates to match the logged in user
-                    console.assert(user.id === app.currentUser.id);
-                    return user;
-                } catch (err) {
-                    console.error("Failed to log in", err);
-                }
-            };
-            
             //check sessionStorage
             if(!window.app.currentUser){
                 alert('Please login!')
                 window.location.href = "login.html";
             }else{
-                window.app.currentUser.functions.getData().then((y)=>{
-                            console.log('y',y);
-                            let options = {};
-                            let ticketOptions = {};
-                            if(y){
-                                y.data.forEach((item)=>{
-                                    if(!options[item.event_identifier]){
-                                        options[item.event_identifier] = "";
-                                    }
-                                    
-                                    options[item.event_identifier] = "<option value='"+item.event_identifier+"'>"+item.event_identifier+"</option>"
-                                    if(!ticketOptions[item.event_identifier]){
-                                        ticketOptions[item.event_identifier] = {};
-                                    }
-                                    if(!ticketOptions[item.event_identifier][item.access_type]){
-                                        ticketOptions[item.event_identifier][item.access_type] = "";
-                                    }
-                                    if(!String(ticketOptions[item.event_identifier][item.access_type]).includes(item.access_type)){
-                                        ticketOptions[item.event_identifier][item.access_type] = "<option value='"+item.access_type+"'>"+item.access_type+"</option>"
-                                    }
-                                });
-                                console.log('options',options);
-                                console.log('values',Object.values(options).join(''))
-                                console.log('toptions',ticketOptions);
-                                console.log('tvalues',Object.values(ticketOptions).join(''));
-                                $("#select-evt-id").html(Object.values(options).join(''));
-                                $("#select-evt-id").off('change').on('change',function(){
-                                    $("#select-tt").html(Object.values(ticketOptions[$(this).val()]).join(''));
-                                });
-                                $("#select-evt-id").trigger("change");
-                                window.dt = $('#example').DataTable({
-                                    responsive:true,
-                                    fixedHeader:true,
-                                    data: y.data,
-                                    columns: [
-                                        { data: '_id',"render": function ( data, type, row, meta ) {
-                                            console.log('data',data);
-                                            return '<img style="max-width:3em;" src="https://api.qrserver.com/v1/create-qr-code/?data='+encodeURIComponent(data)+'">';
-                                        }},
-                                        { data: 'access_type' },
-                                        { data: 'event_identifier',"render": function ( data, type, row, meta ) {
-                                            console.log('data',data);
-                                            return '<a href="event.html?event_identifier='+encodeURIComponent(data)+'">'+data+'</a>';
-                                        }},
-                                        { data: 'email' },
-                                        { data: 'scanned' },
-                                    ],
-                                });
-                                $("#auth").hide();
-                                $("#wrapper").show();
-                            }
-                        });
+                loadFreshData();
             }
             
         });
