@@ -14,7 +14,7 @@ exports = async function(ticket_type,e_id) {
     let e = await evts.findOne({event_identifier:e_id});
     let newWL = [];
     let targetUserId = '';
-    
+    let err = false;
     let evtUpdate = false;
     function randomIntFromInterval(min, max) { // min and max included 
       return Math.floor(Math.random() * (max - min + 1) + min)
@@ -25,9 +25,21 @@ exports = async function(ticket_type,e_id) {
       if(ct.label == ticket_type && ct.waitlist.length > 0){
         //special case - just one person
         let index = 0;
-        if(ct.waitlist.length > 1){
+        if(ct.waitlist.length > 0){
           //pick someone randomly 
-          index = randomIntFromInterval(0,ct.waitlist.length);  
+          console.log('ct.waitlist.length',ct.waitlist.length-1);
+          index = randomIntFromInterval(0,ct.waitlist.length-1);  
+          let retry=0;
+          console.log('index',index);
+          while(ct.waitlist[index]['user_id'] == source && retry < 3){
+              retry++;
+              index = randomIntFromInterval(0,ct.waitlist.length);
+              console.log('trying waitlist index',index);
+          }
+          if(ct.waitlist[index]['user_id'] == source){
+              err = {"err":"Cannot transfer ticket to self."};
+              break; //exit the forloop
+          }
         }
         console.log('index',index);
         let person = ct.waitlist[index];
@@ -43,9 +55,12 @@ exports = async function(ticket_type,e_id) {
             }
           })  
         }
-        evtUpdate = await evts.updateOne({event_identifier:e_id,"tickets.label":ticket_type},{$set:{"tickets.$.waitlist":newWL}});//"pokemon.$.name": "Agumon"
+        
         break;
       }
+    }
+    if(err){
+      return err;
     }
     console.log('targetUserId',targetUserId);
     console.log('target',target);
@@ -53,8 +68,13 @@ exports = async function(ticket_type,e_id) {
     //in between, when platform supports paid tickets - we could automagically handle the financial transaction. NO RESALE FEE
     //the below changes the ticket 
     if(targetUserId){
-      let ctix = await tix.updateOne({event_identifier:e_id,access_type:ticket_type,user_id:source},{$set:{user_id:targetUserId,email:target}});
-      return {ctix:ctix, evtUpdate:evtUpdate};  
+      let tmpTicket = await tix.findOne({event_identifier:e_id,access_type:ticket_type,user_id:source,scanned:false});
+      if(tmpTicket){
+        evtUpdate = await evts.updateOne({event_identifier:e_id,"tickets.label":ticket_type},{$set:{"tickets.$.waitlist":newWL}});//"pokemon.$.name": "Agumon"
+        let ctix = await tix.updateOne({event_identifier:e_id,access_type:ticket_type,scanned:false,user_id:source},{$set:{user_id:targetUserId,email:target}});
+        return {ctix:ctix, evtUpdate:evtUpdate};  
+      }
+      return {"err":"no ticket available for transfer"};
     }
     return {"err":"SOMETHING WENT WRONG WITH TICKET TRANSFER"};
     
