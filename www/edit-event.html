@@ -10,27 +10,156 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Rubik+Microbe&display=swap" rel="stylesheet">
         <link href="main.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
             <h1 style="letter-spacing: 3px;font-size: 3rem;color:black;"><img src="small-tix.png" style="height:3rem;margin-bottom: -.2em;"/>    event0 - edit event</h1>
         </div>
         <div id="auth">
-            <div class="container">
-                <div style="width:100%;">
-                    <h4>Tickets</h4>
-                    <pre id="json-display" ></pre>
-                </div>
+            <div class="container" style="width:85%;margin: 0 auto;">
                 
-                <form action="#">
-                    <label>Event Description</label>
-                    <input id="input-eventdescr" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="IT WILL BE LIT"/>
-                   
-                    <input type="button" value="update event" class="btn" id="new-btn" />
-                </form>
-                <div class="pass-link">
-                    <a href="#" >Ticketing for hoomans</a>
-                </div>	
+                
+                <div class="evt-tab">
+                    <button class="evt-tablinks" onclick="openEvtTab(event, 'London')">General</button>
+                    <button class="evt-tablinks" onclick="openEvtTab(event, 'Paris')">Tickets</button>
+                    <button class="evt-tablinks" onclick="openEvtTab(event, 'NYC')">Staff</button>
+                    <button class="evt-tablinks" id="new-btn" style="background-color: #3498DB; color: #fff; line-height: 25px; cursor: pointer;float:right;">UPDATE EVENT</button>
+                  </div>
+                  
+                  <div id="London" class="evt-tabcontent">
+                    <h3>General</h3>
+                    <form action="#">
+                        <label>Event Name</label>
+                        <input id="input-eventname" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="NEW EVENT"/>
+                        <label>Event Description</label>
+                        <input id="input-eventdescr" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="IT WILL BE LIT"/>
+                    </form>
+                  </div>
+                  
+                  <div id="Paris" class="evt-tabcontent">
+                    
+                    <div style="width:80%;display: block;margin: 0 auto;padding-bottom: 5rem;">
+                        <!--https://codepen.io/Mestika/pen/oNzEWR-->
+                        <fieldset id="buildyourform-tickets">
+                            <legend>Tickets</legend>
+                        </fieldset>
+                        <input type="button" value="Add a ticket type" class="add" id="add-ticket" />
+                        <script>
+                            let loadTickets = function(tix){
+                                tix.forEach((t)=>{
+                                    var intId = $("#buildyourform-tickets div").length + 1;
+                                    var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"ticket-field" + intId + "\"/>");
+                                    var fName = $("<label>Ticket Label:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" value=\""+t.label+"\" /><br /><label>Price:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" value=\""+t.price+"\"/><br /><label>Inventory:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" value=\""+t.max2sell+"\"/>");
+                                    var fType = $("<br />");
+                                    var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
+                                    removeButton.click(function() {
+                                        $(this).parent().remove();
+                                    });
+                                    fieldWrapper.append(fName);
+                                    fieldWrapper.append(fType);
+                                    fieldWrapper.append(removeButton);
+                                    $("#buildyourform-tickets").append(fieldWrapper);
+                                })
+                            }
+                            let loadStaff = function(s){
+                                s.forEach((staff)=>{
+                                    var intId = $("#buildyourform div").length + 1;
+                                    var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"person-field" + intId + "\"/>");
+                                    var fName = $("<label>Staff:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" value=\""+staff.email+"\"/>");
+                                    var fType = $("<br />");
+                                    var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
+                                    removeButton.click(function() {
+                                        $(this).parent().remove();
+                                    });
+                                    fieldWrapper.append(fName);
+                                    fieldWrapper.append(fType);
+                                    fieldWrapper.append(removeButton);
+                                    $("#buildyourform-person").append(fieldWrapper);
+                                })
+                            }
+                            $(document).ready(function() {
+                                openEvtTab(false, 'London'); //load GENERAL first
+
+                                $("#add-ticket").click(function() {
+                                    var intId = $("#buildyourform-tickets div").length + 1;
+                                    var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"ticket-field" + intId + "\"/>");
+                                    var fName = $("<label>Ticket Label:</label><br /><input placeholder=\"Ticket A\" type=\"text\" class=\"fieldname\" /><br /><label>Price:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" /><br /><label>Inventory:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" />");
+                                    var fType = $("<br />");
+                                    var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
+                                    removeButton.click(function() {
+                                        $(this).parent().remove();
+                                    });
+                                    fieldWrapper.append(fName);
+                                    fieldWrapper.append(fType);
+                                    fieldWrapper.append(removeButton);
+                                    $("#buildyourform-tickets").append(fieldWrapper);
+                                });
+    
+                                let defaultTickets = getJson();
+                                if(defaultTickets){
+                                    //loadTickets(defaultTickets);
+                                }
+                                
+                            });
+    
+                        </script>
+                    </div>
+                  </div>
+                  
+                  <div id="NYC" class="evt-tabcontent">
+                    
+                    <div style="width:80%;display: block;margin: 0 auto;padding-bottom: 5rem;">
+                        <!--https://codepen.io/Mestika/pen/oNzEWR-->
+                        <fieldset id="buildyourform-person">
+                            <legend>Staff <br /><i>Only staff members and event owners can scan you in.</i></legend>
+                        </fieldset>
+                        <input type="button" value="Add a staff member" class="add" id="add-person" />
+                        <script>
+                            $(document).ready(function() {
+                                $("#add-person").click(function() {
+                                    var intId = $("#buildyourform div").length + 1;
+                                    var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"person-field" + intId + "\"/>");
+                                    var fName = $("<label>Staff:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" />");
+                                    var fType = $("<br />");
+                                    var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
+                                    removeButton.click(function() {
+                                        $(this).parent().remove();
+                                    });
+                                    fieldWrapper.append(fName);
+                                    fieldWrapper.append(fType);
+                                    fieldWrapper.append(removeButton);
+                                    $("#buildyourform-person").append(fieldWrapper);
+                                });
+                                
+                            });
+    
+                        </script>
+                    </div>
+                  </div>
+                  
+                  
+                  <script>
+                  function openEvtTab(e, cityName) {
+                    var i, tabcontent, tablinks;
+                    tabcontent = document.getElementsByClassName("evt-tabcontent");
+                    for (i = 0; i < tabcontent.length; i++) {
+                      tabcontent[i].style.display = "none";
+                    }
+                    tablinks = document.getElementsByClassName("evt-tablinks");
+                    for (i = 0; i < tablinks.length; i++) {
+                      tablinks[i].className = tablinks[i].className.replace(" active", "");
+                    }
+                    document.getElementById(cityName).style.display = "block";
+                    if(e){e.currentTarget.className += " active";}
+                    else{
+                        $(".evt-tab>:first").addClass('active');
+                    }
+                  }
+                  </script>
+                  
+
+                
             </div>
         </div>
 
@@ -38,7 +167,7 @@
         
 
         <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        
         <script src="jquery.json-editor.min.js"></script>
         <script type="text/javascript">
             function getJson() {
@@ -48,47 +177,118 @@
                     alert('Wrong JSON Format: ' + ex);
                 }
             }
-            var editor = new JsonEditor('#json-display', getJson());
         </script>
+       
         <script>
             $(document).ready(function () {
                 const params = new URLSearchParams(window.location.search);
                 let e_id = params.get("event_identifier")?params.get("event_identifier"):"DEMO";
                 
-                $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/available?event_id="+encodeURIComponent(e_id)).then((x)=>{
-                    console.log('x',x); //use ctt
-                    $("#input-eventdescr").val(x.event);
-                    //loop through event tickets and generate JSON 
-                    let eJSON = [];
-                    let tmpKeys = Object.keys(x.data);
-                    tmpKeys.forEach((k)=>{
-                        eJSON.push({label:k, price: x.data[k]['price'], max2sell: x.data[k]['max2sell']})
-                    });
-                    editor.load(eJSON);
-                });
                 window.app = new Realm.App({ id: "application-2-ntsvm" });
+                if(!window.app.currentUser){
+                    alert('Please login!')
+                    window.location.href = "login.html";
+                }else{
+                    console.log('already logged in',window.app.currentUser);
+                    $.getJSON("https://us-east-1.aws.data.mongodb-api.com/app/application-2-ntsvm/endpoint/available?event_id="+encodeURIComponent(e_id)).then((x)=>{
+                        console.log('x',x); //use ctt
+                        $("#input-eventdescr").val(x.event);
+                        $("#input-eventname").val(x.x.event_identifier);
+                        //
+                        //loop through event tickets and generate JSON 
+                        let eJSON = [];
+                        let tmpKeys = Object.keys(x.data);
+                        tmpKeys.forEach((k)=>{
+                            eJSON.push({label:k, price: x.data[k]['price'], max2sell: x.data[k]['max2sell']})
+                        });
+                        loadTickets(eJSON);
+                        console.log('eJSONTickets',eJSON);
+                        loadStaff(x.x.event_staff);
+                        console.log('eJSONStaff',x.x.event_staff);
 
-                $("#new-btn").off('click').on("click",function(){
-                    let email = $("#input-username").val();
-                    let password = $("#input-password").val();
-                    let event_label = e_id;
-                    let event_tickets = (editor.get());
-                    console.log('foreach',event_tickets);
-                    event_tickets.forEach((t)=>{
-                        t['sold'] = 0;
-                        t['waitlist'] = [];
-                        t['price'] = parseFloat(String(t['price']));
                     });
-                    console.log('event_tickets',event_tickets);
-                    if(!window.app.currentUser){
-                        alert('Please login!')
-                        window.location.href = "login.html";
+                }
+
+                
+                function getJsonStaff() {
+                    if(window.app.currentUser){
+                        
+                        try {
+                            return JSON.parse('[{"email":"'+window.app.currentUser._profile.data.email+'"}]');
+                        } catch (ex) {
+                            alert('Wrong JSON Format: ' + ex);
+                        }
                     }else{
-                        console.log('already logged in',window.app.currentUser);
+                        alert('Please log in!');
+                        window.location.href = "index.html";
+                    }
+                }
+                let defaultStaff = getJsonStaff();
+                if(defaultStaff){
+                    //loadStaff(defaultStaff);
+                }
+                $("#new-btn").off('click').on("click",function(){
+                    
+                    let event_label = $("#input-eventname").val();
+                    let event_tickets = [];
+                    let event_staff = [];
+                    
+                    $("#buildyourform-tickets div").each((t,item)=>{
+                        console.log('t',t,item);
+                        tmpTicket = {};
+                        $(item).find('input').each((x,v)=>{
+                            console.log('xxx',x,$(v).val())
+                            if(x == 3){/*ignore because its just the - sign*/}
+                            else{
+                                switch(x){
+                                    case 2:
+                                        tmpTicket['max2sell'] = parseInt($(v).val(),10);
+                                        break;
+                                    case 1:
+                                        tmpTicket['price'] = parseInt($(v).val(),10);
+                                        break;
+                                    case 0:
+                                        tmpTicket['label'] = String($(v).val());
+                                        break;
+                                }
+                            }
+                        })
+                        if(tmpTicket['max2sell'] && tmpTicket['price'] && tmpTicket['label']){
+                            event_tickets.push(tmpTicket);
+                        }
+                    });
+                    console.log('event_tickets',event_tickets)
+                    if(event_tickets.length == 0){
+                        alert('invalid tickets');
+                        return false;
+                    }
+
+                    $("#buildyourform-person div").each((t,item)=>{
+                        console.log('t',t,item);
+                        tmpStaff = {};
+                        $(item).find('input').each((x,v)=>{
+                            console.log('xxx',x,$(v).val())
+                            if(x == 1){/*ignore because its just the - sign*/}
+                            else{
+                                switch(x){
+                                    case 0:
+                                        tmpStaff['email'] = String($(v).val());
+                                        break;
+                                }
+                            }
+                        })
+                        if(tmpStaff['email'] ){
+                            event_staff.push(tmpStaff);
+                        }
+                    });
+                    console.log('event_staff',event_staff)
+                    if(event_staff.length == 0){
+                        alert('invalid staff');
+                        return false;
                     }
                     let event_descr = $("#input-eventdescr").val();
                     if(window.app.currentUser){
-                        window.app.currentUser.functions.updateEvent(event_label,event_tickets,event_descr).then((y)=>{
+                        window.app.currentUser.functions.updateEvent(event_label,event_tickets,event_descr,event_staff).then((y)=>{
                             console.log('y',y);
                             if(y){
                                 alert('Event updated.');
@@ -103,5 +303,6 @@
             });
             
         </script>
+         
     </body>
 </html>
