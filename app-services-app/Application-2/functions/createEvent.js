@@ -9,13 +9,13 @@ exports = async function(event_label,event_tickets,event_description,event_staff
   if(event_label.length >= 5 && e.length == 0){
     // no events for label, we good 
     console.log('EVENT_TICKETS',event_tickets);
-   await evt.insertOne({
-     tickets:event_tickets, event_staff: event_staff,
-     event_description: event_description, 
-     event_identifier:event_label, 
-     user_id:context.user.id}); 
-     
-   return true;
+    await evt.insertOne({
+       tickets:event_tickets, event_staff: event_staff,
+       event_description: event_description, 
+       event_identifier:event_label, 
+       user_id:context.user.id}); 
+       
+    return true;
   }else{
     return false; //cant do this my friend.... label conflict
   }
