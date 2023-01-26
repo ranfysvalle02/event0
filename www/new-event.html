@@ -17,112 +17,149 @@
             <h1 style="letter-spacing: 3px;font-size: 3rem;color:black;"><img src="small-tix.png" style="height:3rem;margin-bottom: -.2em;"/>    event0 - new event</h1>
         </div>
         <div id="auth">
-            <div class="container">
+            <div class="container" style="width:85%;margin: 0 auto;">
                 
-                <div>
-                    <!--https://codepen.io/Mestika/pen/oNzEWR-->
-                    <fieldset id="buildyourform-person">
-                        <legend>Staff <br /><i>Only staff members and event owners can scan you in.</i></legend>
-                    </fieldset>
-                    <input type="button" value="Add a staff member" class="add" id="add-person" />
-                    <script>
-                        $(document).ready(function() {
-                            $("#add-person").click(function() {
-                                var intId = $("#buildyourform div").length + 1;
-                                var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"person-field" + intId + "\"/>");
-                                var fName = $("<label>Staff:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" />");
-                                var fType = $("<br />");
-                                var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
-                                removeButton.click(function() {
-                                    $(this).parent().remove();
-                                });
-                                fieldWrapper.append(fName);
-                                fieldWrapper.append(fType);
-                                fieldWrapper.append(removeButton);
-                                $("#buildyourform-person").append(fieldWrapper);
-                            });
-                            
-                        });
-
-                    </script>
-                </div>
-                <div>
-                    <!--https://codepen.io/Mestika/pen/oNzEWR-->
-                    <fieldset id="buildyourform-tickets">
-                        <legend>Tickets</legend>
-                    </fieldset>
-                    <input type="button" value="Add a ticket type" class="add" id="add-ticket" />
-                    <script>
-                        let loadTickets = function(tix){
-                            tix.forEach((t)=>{
-                                var intId = $("#buildyourform-tickets div").length + 1;
-                                var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"ticket-field" + intId + "\"/>");
-                                var fName = $("<label>Ticket Label:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" value=\""+t.label+"\" /><br /><label>Price:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" value=\""+t.price+"\"/><br /><label>Inventory:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" value=\""+t.max2sell+"\"/>");
-                                var fType = $("<br />");
-                                var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
-                                removeButton.click(function() {
-                                    $(this).parent().remove();
-                                });
-                                fieldWrapper.append(fName);
-                                fieldWrapper.append(fType);
-                                fieldWrapper.append(removeButton);
-                                $("#buildyourform-tickets").append(fieldWrapper);
-                            })
-                        }
-                        let loadStaff = function(s){
-                            s.forEach((staff)=>{
-                                var intId = $("#buildyourform div").length + 1;
-                                var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"person-field" + intId + "\"/>");
-                                var fName = $("<label>Staff:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" value=\""+staff.email+"\"/>");
-                                var fType = $("<br />");
-                                var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
-                                removeButton.click(function() {
-                                    $(this).parent().remove();
-                                });
-                                fieldWrapper.append(fName);
-                                fieldWrapper.append(fType);
-                                fieldWrapper.append(removeButton);
-                                $("#buildyourform-person").append(fieldWrapper);
-                            })
-                        }
-                        $(document).ready(function() {
-                            $("#add-ticket").click(function() {
-                                var intId = $("#buildyourform-tickets div").length + 1;
-                                var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"ticket-field" + intId + "\"/>");
-                                var fName = $("<label>Ticket Label:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" /><br /><label>Price:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" /><br /><label>Inventory:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" />");
-                                var fType = $("<br />");
-                                var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
-                                removeButton.click(function() {
-                                    $(this).parent().remove();
-                                });
-                                fieldWrapper.append(fName);
-                                fieldWrapper.append(fType);
-                                fieldWrapper.append(removeButton);
-                                $("#buildyourform-tickets").append(fieldWrapper);
-                            });
-
-                            let defaultTickets = getJson();
-                            if(defaultTickets){
-                                loadTickets(defaultTickets);
+                
+                <div class="evt-tab">
+                    <button class="evt-tablinks" onclick="openEvtTab(event, 'London')">General</button>
+                    <button class="evt-tablinks" onclick="openEvtTab(event, 'Paris')">Tickets</button>
+                    <button class="evt-tablinks" onclick="openEvtTab(event, 'NYC')">Staff</button>
+                    <button class="evt-tablinks" id="new-btn" style="background-color: #3498DB; color: #fff; line-height: 25px; cursor: pointer;float:right;">CREATE EVENT</button>
+                  </div>
+                  
+                  <div id="London" class="evt-tabcontent">
+                    <h3>General</h3>
+                    <form action="#">
+                        <label>Event Name</label>
+                        <input id="input-eventname" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="NEW EVENT"/>
+                        <label>Event Description</label>
+                        <input id="input-eventdescr" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="IT WILL BE LIT"/>
+                    </form>
+                  </div>
+                  
+                  <div id="Paris" class="evt-tabcontent">
+                    
+                    <div style="width:80%;display: block;margin: 0 auto;padding-bottom: 5rem;">
+                        <!--https://codepen.io/Mestika/pen/oNzEWR-->
+                        <fieldset id="buildyourform-tickets">
+                            <legend>Tickets</legend>
+                        </fieldset>
+                        <input type="button" value="Add a ticket type" class="add" id="add-ticket" />
+                        <script>
+                            let loadTickets = function(tix){
+                                tix.forEach((t)=>{
+                                    var intId = $("#buildyourform-tickets div").length + 1;
+                                    var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"ticket-field" + intId + "\"/>");
+                                    var fName = $("<label>Ticket Label:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" value=\""+t.label+"\" /><br /><label>Price:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" value=\""+t.price+"\"/><br /><label>Inventory:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" value=\""+t.max2sell+"\"/>");
+                                    var fType = $("<br />");
+                                    var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
+                                    removeButton.click(function() {
+                                        $(this).parent().remove();
+                                    });
+                                    fieldWrapper.append(fName);
+                                    fieldWrapper.append(fType);
+                                    fieldWrapper.append(removeButton);
+                                    $("#buildyourform-tickets").append(fieldWrapper);
+                                })
                             }
-                            
-                        });
+                            let loadStaff = function(s){
+                                s.forEach((staff)=>{
+                                    var intId = $("#buildyourform div").length + 1;
+                                    var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"person-field" + intId + "\"/>");
+                                    var fName = $("<label>Staff:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" value=\""+staff.email+"\"/>");
+                                    var fType = $("<br />");
+                                    var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
+                                    removeButton.click(function() {
+                                        $(this).parent().remove();
+                                    });
+                                    fieldWrapper.append(fName);
+                                    fieldWrapper.append(fType);
+                                    fieldWrapper.append(removeButton);
+                                    $("#buildyourform-person").append(fieldWrapper);
+                                })
+                            }
+                            $(document).ready(function() {
+                                openEvtTab(false, 'London'); //load GENERAL first
 
-                    </script>
-                </div>
+                                $("#add-ticket").click(function() {
+                                    var intId = $("#buildyourform-tickets div").length + 1;
+                                    var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"ticket-field" + intId + "\"/>");
+                                    var fName = $("<label>Ticket Label:</label><br /><input placeholder=\"Ticket A\" type=\"text\" class=\"fieldname\" /><br /><label>Price:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" /><br /><label>Inventory:</label><br /><input placeholder=\"0\" type=\"number\" class=\"fieldname\" />");
+                                    var fType = $("<br />");
+                                    var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
+                                    removeButton.click(function() {
+                                        $(this).parent().remove();
+                                    });
+                                    fieldWrapper.append(fName);
+                                    fieldWrapper.append(fType);
+                                    fieldWrapper.append(removeButton);
+                                    $("#buildyourform-tickets").append(fieldWrapper);
+                                });
+    
+                                let defaultTickets = getJson();
+                                if(defaultTickets){
+                                    loadTickets(defaultTickets);
+                                }
+                                
+                            });
+    
+                        </script>
+                    </div>
+                  </div>
+                  
+                  <div id="NYC" class="evt-tabcontent">
+                    
+                    <div style="width:80%;display: block;margin: 0 auto;padding-bottom: 5rem;">
+                        <!--https://codepen.io/Mestika/pen/oNzEWR-->
+                        <fieldset id="buildyourform-person">
+                            <legend>Staff <br /><i>Only staff members and event owners can scan you in.</i></legend>
+                        </fieldset>
+                        <input type="button" value="Add a staff member" class="add" id="add-person" />
+                        <script>
+                            $(document).ready(function() {
+                                $("#add-person").click(function() {
+                                    var intId = $("#buildyourform div").length + 1;
+                                    var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"person-field" + intId + "\"/>");
+                                    var fName = $("<label>Staff:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" />");
+                                    var fType = $("<br />");
+                                    var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
+                                    removeButton.click(function() {
+                                        $(this).parent().remove();
+                                    });
+                                    fieldWrapper.append(fName);
+                                    fieldWrapper.append(fType);
+                                    fieldWrapper.append(removeButton);
+                                    $("#buildyourform-person").append(fieldWrapper);
+                                });
+                                
+                            });
+    
+                        </script>
+                    </div>
+                  </div>
+                  
+                  
+                  <script>
+                  function openEvtTab(e, cityName) {
+                    var i, tabcontent, tablinks;
+                    tabcontent = document.getElementsByClassName("evt-tabcontent");
+                    for (i = 0; i < tabcontent.length; i++) {
+                      tabcontent[i].style.display = "none";
+                    }
+                    tablinks = document.getElementsByClassName("evt-tablinks");
+                    for (i = 0; i < tablinks.length; i++) {
+                      tablinks[i].className = tablinks[i].className.replace(" active", "");
+                    }
+                    document.getElementById(cityName).style.display = "block";
+                    if(e){e.currentTarget.className += " active";}
+                    else{
+                        $(".evt-tab>:first").addClass('active');
+                    }
+                  }
+                  </script>
+                  
+
                 
-                
-                <form action="#">
-                    <label>Event Name</label>
-                    <input id="input-eventname" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="NEW EVENT"/>
-                    <label>Event Description</label>
-                    <input id="input-eventdescr" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="IT WILL BE LIT"/>
-                   
-                    <input type="button" value="create new event" class="btn" id="new-btn" />
-                </form>
-                <div class="pass-link">
-                    <a href="#" >Ticketing for hoomans</a>
-                </div>	
             </div>
         </div>
 
