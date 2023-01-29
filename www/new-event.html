@@ -11,6 +11,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Rubik+Microbe&display=swap" rel="stylesheet">
         <link href="main.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+        <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet"></link>
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
@@ -24,6 +28,7 @@
                     <button class="evt-tablinks" onclick="openEvtTab(event, 'London')">General</button>
                     <button class="evt-tablinks" onclick="openEvtTab(event, 'Paris')">Tickets</button>
                     <button class="evt-tablinks" onclick="openEvtTab(event, 'NYC')">Staff</button>
+                    <button class="evt-tablinks" onclick="openEvtTab(event, 'FL')">Images</button>
                     <button class="evt-tablinks" id="new-btn" style="background-color: #3498DB; color: #fff; line-height: 25px; cursor: pointer;float:right;">CREATE EVENT</button>
                   </div>
                   
@@ -32,8 +37,29 @@
                     <form action="#">
                         <label>Event Name</label>
                         <input id="input-eventname" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="NEW EVENT"/>
+                        <label>Flyer Image:</label>
+                        <input id="input-eventflyer" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder=""/>
+                        <label>Start Date:</label><br />
+                        <input type="datetime-local" id="meeting-time-1"
+                            name="meeting-time" value="2018-06-12T19:30"
+                             /> <br />
+                        <label>End Date:</label><br />
+                        <input type="datetime-local" id="meeting-time-2"
+                            name="meeting-time" value="2018-06-12T19:30"
+                             /><br />
                         <label>Event Description</label>
                         <input id="input-eventdescr" type="text" style="width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="IT WILL BE LIT"/>
+                        <div id="editor" style="text-align: left;">
+
+                        </div>     
+                        <script>
+                            //https://nhn.github.io/tui.editor/latest/ToastUIEditorCore#getHTML
+                            const Editor = toastui.Editor;
+                            let defaultMD = "# event0 \n##### a ticket platform without the fees or the ticket scalping";
+                            const editor = new Editor({
+                                el: document.querySelector('#editor'), initialValue: defaultMD
+                            });
+                        </script>
                     </form>
                   </div>
                   
@@ -105,6 +131,85 @@
     
                         </script>
                     </div>
+                  </div>
+                  
+                  <div id="FL" class="evt-tabcontent">
+                    <h3>Pictures</h3>
+                    <div style="width:80%;display: block;margin: 0 auto;padding-bottom: 5rem;">
+                        <!--https://codepen.io/Mestika/pen/oNzEWR-->
+                        <fieldset id="buildyourform-imgs">
+                            <legend>Photos</legend>
+                        </fieldset>
+                        <input type="button" value="Add an image" class="add" id="add-img" />
+
+                    </div>
+                    <hr />
+                    <section id="image-carousel" class="splide" aria-label="Beautiful Images" style="width: 50%; margin: 0 auto;">
+                        <div class="splide__track">
+                                <ul class="splide__list">
+                                    sfdz
+                                </ul>
+                        </div>
+                    </section>
+                    <script>
+                        let generateSliderHTML = function(imgs){
+                            let tmpHTML = '';
+                            console.log('imggs',imgs)
+                            imgs.forEach((i)=>{
+                                console.log('i',i)
+                                tmpHTML += '<li class="splide__slide"> <img src="'+String(i)+'" alt=""> </li>';
+                            });
+                            return tmpHTML;
+                        }
+                        
+                    </script>
+
+
+                    <script>
+                        let loadImages = function(imgs){
+                            imgs.forEach((i)=>{
+                                var intId = $("#buildyourform-imgs div").length + 1;
+                                var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"img-field" + intId + "\"/>");
+                                var fName = $("<label>Image:</label><br /><input placeholder=\"staff@gmail.com\" type=\"text\" class=\"fieldname\" value=\""+i+"\"/>");
+                                var fType = $("<br />");
+                                var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
+                                removeButton.click(function() {
+                                    $(this).parent().remove();
+                                });
+                                fieldWrapper.append(fName);
+                                fieldWrapper.append(fType);
+                                fieldWrapper.append(removeButton);
+                                $("#buildyourform-imgs").append(fieldWrapper);
+                            })
+
+                            
+                            /*
+                            $("#image-carousel>.splide__track>.splide__list").html(generateSliderHTML(imgs));
+                            
+                            new Splide( '#image-carousel', {
+                                        rewind    : true,
+                            } ).mount();
+                            */
+                        }
+                        $(document).ready(function() {
+                            let defaultImgs = ["https://source.unsplash.com/random","https://source.unsplash.com/random"];
+                            loadImages(defaultImgs);
+                        });
+                        $("#add-img").click(function() {
+                            var intId = $("#buildyourform-imgs div").length + 1;
+                            var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"ticket-field" + intId + "\"/>");
+                            var fName = $("<label>Image:</label><br /><input placeholder=\"https://source.unsplash.com/random\" type=\"text\" class=\"fieldname\" />");
+                            var fType = $("<br />");
+                            var removeButton = $("<input type=\"button\" class=\"remove\" style='background:red;font-weight:bold;' value=\"-\" />");
+                            removeButton.click(function() {
+                                $(this).parent().remove();
+                            });
+                            fieldWrapper.append(fName);
+                            fieldWrapper.append(fType);
+                            fieldWrapper.append(removeButton);
+                            $("#buildyourform-imgs").append(fieldWrapper);
+                        });
+                    </script>
                   </div>
                   
                   <div id="NYC" class="evt-tabcontent">
@@ -181,16 +286,22 @@
        
         <script>
             $(document).ready(function () {
-
+                const params = new URLSearchParams(window.location.search);
+                let e_id = params.get("event_identifier")?params.get("event_identifier"):"DEMO";
+                
                 window.app = new Realm.App({ id: "application-2-ntsvm" });
                 if(!window.app.currentUser){
                     alert('Please login!')
                     window.location.href = "login.html";
                 }else{
                     console.log('already logged in',window.app.currentUser);
+                    let defaultStaff = getJsonStaff();
+                    if(defaultStaff){
+                        loadStaff(defaultStaff);
+                    }
                 }
 
-
+                
                 function getJsonStaff() {
                     if(window.app.currentUser){
                         
@@ -206,7 +317,7 @@
                 }
                 let defaultStaff = getJsonStaff();
                 if(defaultStaff){
-                    loadStaff(defaultStaff);
+                    //loadStaff(defaultStaff);
                 }
                 $("#new-btn").off('click').on("click",function(){
                     
@@ -263,13 +374,46 @@
                         }
                     });
                     console.log('event_staff',event_staff)
+
                     if(event_staff.length == 0){
                         alert('invalid staff');
                         return false;
                     }
+
+                    let event_md = editor.getHTML();
+                    let event_flyer = $("#input-eventflyer").val();
+                    let event_sd = $("#meeting-time-1").val();
+                    let event_ed = $("#meeting-time-2").val();
+                    if(event_sd >= event_ed){
+                        alert('Something funky with the dates'); return false;
+                    }
+                    let event_images = [];
+                    
+                    $("#buildyourform-imgs div").each((t,item)=>{
+                        console.log('t',t,item);
+                        $(item).find('input').each((x,v)=>{
+                            console.log('xxx',x,$(v).val())
+                            if(x == 1){/*ignore because its just the - sign*/}
+                            else{
+                                switch(x){
+                                    case 0:
+                                    event_images.push(String($(v).val()));
+                                        break;
+                                }
+                            }
+                        })
+                    });
+                    console.log('event_images',event_images);
+
+
+
+                    if(event_images.length == 0){alert('Please upload at least one image for your event!');return false}
+                    if(!event_flyer){alert('Flyer image is required!');return false;}
+
                     let event_descr = $("#input-eventdescr").val();
+
                     if(window.app.currentUser){
-                        window.app.currentUser.functions.createEvent(event_label,event_tickets,event_descr,event_staff).then((y)=>{
+                        window.app.currentUser.functions.createEvent(event_label,event_tickets,event_descr,event_staff,event_md,event_flyer,event_sd,event_ed,event_images).then((y)=>{
                             console.log('y',y);
                             if(y){
                                 alert('Event created.');

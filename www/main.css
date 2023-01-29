@@ -262,3 +262,8 @@ input.add
   .fieldwrapper{
     border-top:0.2em solid black;
   }
+
+  .splide__slide img {
+    width: 100%;
+    height: auto;
+  }
