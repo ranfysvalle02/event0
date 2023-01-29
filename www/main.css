@@ -267,3 +267,7 @@ input.add
     width: 100%;
     height: auto;
   }
+
+  #event_md h1{
+    color: black !important;
+  }

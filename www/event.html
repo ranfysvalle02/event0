@@ -11,6 +11,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Rubik+Microbe&display=swap" rel="stylesheet">
         <link href="main.css" rel="stylesheet">
         <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet"></link>
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
@@ -64,13 +68,46 @@
             <p id="event_descr">
 
             </p>
+            <div id="event_md">
+
+            </div>
         </div>
         
         <div id="Paris" class="tabcontent">
             <h3>Photos</h3>
-            <p>
-                <div class="powr-photo-gallery" id="be802383_1674349549"></div><script src="https://www.powr.io/powr.js?platform=html"></script>
-            </p>
+            <section id="image-carousel" class="splide" aria-label="Beautiful Images" style="width: 50%; margin: 0 auto;">
+                <div class="splide__track">
+                        <ul class="splide__list">
+                            
+                        </ul>
+                </div>
+            </section>
+            <script>
+                let generateSliderHTML = function(imgs){
+                    let tmpHTML = '';
+                    console.log('imggs',imgs)
+                    imgs.forEach((i)=>{
+                        console.log('i',i)
+                        tmpHTML += '<li class="splide__slide"> <img src="'+String(i)+'" alt=""> </li>';
+                    });
+                    return tmpHTML;
+                }
+                
+            </script>
+            <script>
+                let loadImages = function(imgs){
+                    
+                    
+                    $("#image-carousel>.splide__track>.splide__list").html(generateSliderHTML(imgs));
+                    
+                    new Splide( '#image-carousel', {
+                                rewind    : true,
+                    } ).mount();
+                    
+                }
+                let defaultImgs = ["https://source.unsplash.com/random","https://source.unsplash.com/random"];
+                
+            </script>
         </div>
         
         
@@ -79,7 +116,7 @@
         
 
 
-<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
         <script>
             const params = new URLSearchParams(window.location.search);
             let e_id = params.get("event_identifier")?params.get("event_identifier"):"DEMO";
@@ -193,6 +230,11 @@
                     $("#ticket-type").html(tmpHTML); 
                 })
                 $("#event_descr").html(x.event)
+
+                //new stuff 
+                loadImages(x.x.event_images);
+                $("#event_md").html(x.x.event_md);
+
             });
         </script>
         <script>

@@ -147,7 +147,7 @@
                     <section id="image-carousel" class="splide" aria-label="Beautiful Images" style="width: 50%; margin: 0 auto;">
                         <div class="splide__track">
                                 <ul class="splide__list">
-                                    sfdz
+                                    
                                 </ul>
                         </div>
                     </section>
@@ -194,7 +194,7 @@
                         $(document).ready(function() {
                             let defaultImgs = ["https://source.unsplash.com/random","https://source.unsplash.com/random"];
                             //loadImages(defaultImgs);
-                            
+
                         });
                         $("#add-img").click(function() {
                             var intId = $("#buildyourform-imgs div").length + 1;
@@ -311,7 +311,10 @@
                         console.log('eJSONTickets',eJSON);
                         loadStaff(x.x.event_staff);
                         console.log('eJSONStaff',x.x.event_staff);
-
+                        loadImages(x.x.event_images);
+                        $("#input-eventflyer").val(x.x.event_flyer);
+                        $("#meeting-time-1").val(x.x.event_sd);
+                        $("#meeting-time-2").val(x.x.event_ed);
                     });
                 }
 
