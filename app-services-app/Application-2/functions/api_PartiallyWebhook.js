@@ -34,7 +34,7 @@ exports = async function({ query, headers, body}, response) {
     for(let i = 0; i < demoEvt.tickets.length; i++){
       let t = demoEvt.tickets[i];
       if(tt == t.label){
-        if(t.max2sell > t.sold){
+        if(!t.sold || t.max2sell > t.sold){
           evtUpdate = await evt.updateOne({event_identifier:event_identifier,"tickets.label":t.label},{$inc:{
             'tickets.$.sold':1
           }});

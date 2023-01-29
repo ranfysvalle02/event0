@@ -42,6 +42,8 @@
                         <th>id</th>
                         <th>event_identifier</th>
                         <th>description</th>
+                        <th>start date</th>
+                        <th>end date</th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -49,6 +51,8 @@
                         <th>id</th>
                         <th>event_identifier</th>
                         <th>description</th>
+                        <th>start date</th>
+                        <th>end date</th>
                     </tr>
                 </tfoot>
             </table>
@@ -84,7 +88,7 @@
                 window.location.href = "login.html";
             }else{
                         console.log('user',window.app.currentUser);
-                        const getEvents = () => `{ events { _id event_identifier event_description } }`;
+                        const getEvents = () => `{ events { _id event_identifier event_description event_sd event_ed} }`;
                         const options = {
                             method: "post",
                             headers: {
@@ -119,6 +123,7 @@
                                                 return '<a href="event.html?event_identifier='+encodeURIComponent(data)+'">'+data+'</a>';
                                             }},
                                             { data: 'event_description' },
+                                            { data: 'event_sd' },{ data: 'event_ed' },
                                         ],
                                     });
                                     $("#auth").hide();

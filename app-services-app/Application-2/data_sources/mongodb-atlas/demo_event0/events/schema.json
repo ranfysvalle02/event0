@@ -6,8 +6,37 @@
         "event_description": {
             "bsonType": "string"
         },
+        "event_ed": {
+            "bsonType": "string"
+        },
+        "event_flyer": {
+            "bsonType": "string"
+        },
         "event_identifier": {
             "bsonType": "string"
+        },
+        "event_images": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "string"
+            }
+        },
+        "event_md": {
+            "bsonType": "string"
+        },
+        "event_sd": {
+            "bsonType": "string"
+        },
+        "event_staff": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "object",
+                "properties": {
+                    "email": {
+                        "bsonType": "string"
+                    }
+                }
+            }
         },
         "tickets": {
             "bsonType": "array",
@@ -22,23 +51,6 @@
                     },
                     "price": {
                         "bsonType": "int"
-                    },
-                    "sold": {
-                        "bsonType": "long"
-                    },
-                    "waitlist": {
-                        "bsonType": "array",
-                        "items": {
-                            "bsonType": "object",
-                            "properties": {
-                                "email": {
-                                    "bsonType": "string"
-                                },
-                                "user_id": {
-                                    "bsonType": "string"
-                                }
-                            }
-                        }
                     }
                 }
             }

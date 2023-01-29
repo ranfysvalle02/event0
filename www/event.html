@@ -27,13 +27,13 @@
 
         <div id="auth">
             <div id="pre-buy" class="container">
-                <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
+                <img class="event-flyer"  style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
                 <button  type="button" style="width:100%;color:black;cursor:pointer; font-weight:bold; letter-spacing:5px;padding:1em;background:green;" onClick="$('#pre-buy').hide();$('#buy-section').show();">BUY TICKET</button>                
             </div>
             <div id="buy-section" class="container" style="display: none;">
                 
                 
-                <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
+                <img class="event-flyer" style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
                 <label>Ticket Type:</label><br />
                 <select id="ticket-type" style="width: 100%;">
 
@@ -46,7 +46,7 @@
             </div>
             <div id="ticket-section" class="container" style="display:none;margin: 0 auto;">
                 
-                    <img style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
+                    <img class="event-flyer" style="width:100%;padding-bottom:1em;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.ah-studio.com%2Fwp-content%2Fuploads%2F2020%2F04%2Fhouse-party-2-free-psd-flyer-template-free-psd-flyer-house-party-flyer-template.jpg&f=1&nofb=1&ipt=d285c27ac879517ffaedcbe835b34caf6b4bc24100bd589d26d9a6d35bbdaa84&ipo=images" />
                     <img id="ticket-img" style="width:5em;margin: 0 35%;" src="" />
                     <a href="index.html">View My Tickets</a>
                 
@@ -234,6 +234,7 @@
                 //new stuff 
                 loadImages(x.x.event_images);
                 $("#event_md").html(x.x.event_md);
+                $(".event-flyer").attr('src',x.x.event_flyer);
 
             });
         </script>
