@@ -116,7 +116,7 @@
         
 
 
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.3/purify.min.js" integrity="sha512-3dcbndbDLLWfKWevQu8C/1qVRcxx6h+eRDSnn3/pcBZHISRJgsj3u71U/Ad6nQVHrEi05hOSr6Hnb/p0pWc94w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
             const params = new URLSearchParams(window.location.search);
             let e_id = params.get("event_identifier")?params.get("event_identifier"):"DEMO";
@@ -233,7 +233,11 @@
 
                 //new stuff 
                 loadImages(x.x.event_images);
-                $("#event_md").html(x.x.event_md);
+                //testXSS
+                let testInjection = "<script>"+"alert('x');";
+                //$("#event_md").html(x.x.event_md+testInjection);
+                //use DOMPurify to cleanup the markdown HTML
+                $("#event_md").html(DOMPurify.sanitize(x.x.event_md+testInjection));
                 $(".event-flyer").attr('src',x.x.event_flyer);
 
             });

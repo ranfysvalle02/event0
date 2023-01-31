@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
         <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet"></link>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.3/purify.min.js" integrity="sha512-3dcbndbDLLWfKWevQu8C/1qVRcxx6h+eRDSnn3/pcBZHISRJgsj3u71U/Ad6nQVHrEi05hOSr6Hnb/p0pWc94w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
     <body>
         <div id="header" style="font-family: 'Rubik Microbe', cursive;">
@@ -430,7 +431,7 @@
                     let event_descr = $("#input-eventdescr").val();
 
                     if(window.app.currentUser){
-                        window.app.currentUser.functions.updateEvent(event_label,event_tickets,event_descr,event_staff,event_md,event_flyer,event_sd,event_ed,event_images).then((y)=>{
+                        window.app.currentUser.functions.updateEvent(event_label,event_tickets,event_descr,event_staff,DOMPurify.sanitize(event_md),event_flyer,event_sd,event_ed,event_images).then((y)=>{
                             console.log('y',y);
                             if(y){
                                 alert('Event updated.');
