@@ -1,5 +1,5 @@
 exports = async function(event_label,event_tickets,event_description,event_staff,event_md,event_flyer,event_sd,event_ed,event_images){
-
+  const xss = require("xss");
   const evt = context.services
       .get("mongodb-atlas")
       .db("demo_event0")
@@ -13,7 +13,7 @@ exports = async function(event_label,event_tickets,event_description,event_staff
        tickets:event_tickets, event_staff: event_staff,
        event_description: event_description, 
        event_identifier:event_label, 
-       event_md:event_md,event_flyer:event_flyer,event_sd:event_sd,event_ed:event_ed,event_images:event_images,
+       event_md:xss(event_md),event_flyer:event_flyer,event_sd:event_sd,event_ed:event_ed,event_images:event_images,
        user_id:context.user.id}); 
        
     return true;
